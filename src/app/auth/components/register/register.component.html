@@ -1,0 +1,268 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Inscription professionnel de santé</h2>
+    <p>Veuillez remplir ce formulaire pour créer votre compte ARMA-CARE</p>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- Informations personnelles -->
+      <div class="section-title">
+        <h3>Informations personnelles</h3>
+      </div>
+
+      <div class="form-group">
+        <label for="firstName">Prénom *</label>
+        <input
+          type="text"
+          id="firstName"
+          formControlName="firstName"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && registerForm.get('firstName')?.errors }"
+        />
+        <div *ngIf="submitted && registerForm.get('firstName')?.errors" class="invalid-feedback">
+          <div *ngIf="registerForm.get('firstName')?.errors?.['required']">Le prénom est requis</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Nom *</label>
+        <input
+          type="text"
+          id="lastName"
+          formControlName="lastName"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && registerForm.get('lastName')?.errors }"
+        />
+        <div *ngIf="submitted && registerForm.get('lastName')?.errors" class="invalid-feedback">
+          <div *ngIf="registerForm.get('lastName')?.errors?.['required']">Le nom est requis</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && registerForm.get('email')?.errors }"
+        />
+        <div *ngIf="submitted && registerForm.get('email')?.errors" class="invalid-feedback">
+          <div *ngIf="registerForm.get('email')?.errors?.['required']">L'email est requis</div>
+          <div *ngIf="registerForm.get('email')?.errors?.['email']">Veuillez entrer une adresse email valide</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Téléphone *</label>
+        <input
+          type="tel"
+          id="phone"
+          formControlName="phone"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && registerForm.get('phone')?.errors }"
+        />
+        <div *ngIf="submitted && registerForm.get('phone')?.errors" class="invalid-feedback">
+          <div *ngIf="registerForm.get('phone')?.errors?.['required']">Le numéro de téléphone est requis</div>
+        </div>
+      </div>
+
+      <!-- Informations professionnelles -->
+      <div class="section-title">
+        <h3>Informations professionnelles</h3>
+      </div>
+
+      <div class="form-group">
+        <label for="speciality">Spécialité *</label>
+        <input
+          type="text"
+          id="speciality"
+          formControlName="speciality"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && registerForm.get('speciality')?.errors }"
+        />
+        <div *ngIf="submitted && registerForm.get('speciality')?.errors" class="invalid-feedback">
+          <div *ngIf="registerForm.get('speciality')?.errors?.['required']">La spécialité est requise</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="registrationNumber">Numéro d'enregistrement *</label>
+        <input
+          type="text"
+          id="registrationNumber"
+          formControlName="registrationNumber"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && registerForm.get('registrationNumber')?.errors }"
+        />
+        <div *ngIf="submitted && registerForm.get('registrationNumber')?.errors" class="invalid-feedback">
+          <div *ngIf="registerForm.get('registrationNumber')?.errors?.['required']">Le numéro d'enregistrement est requis</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Adresse *</label>
+        <input
+          type="text"
+          id="address"
+          formControlName="address"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && registerForm.get('address')?.errors }"
+        />
+        <div *ngIf="submitted && registerForm.get('address')?.errors" class="invalid-feedback">
+          <div *ngIf="registerForm.get('address')?.errors?.['required']">L'adresse est requise</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="city">Ville *</label>
+        <input
+          type="text"
+          id="city"
+          formControlName="city"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && registerForm.get('city')?.errors }"
+        />
+        <div *ngIf="submitted && registerForm.get('city')?.errors" class="invalid-feedback">
+          <div *ngIf="registerForm.get('city')?.errors?.['required']">La ville est requise</div>
+        </div>
+      </div>
+
+      <!-- Informations de connexion -->
+      <div class="section-title">
+        <h3>Informations de connexion</h3>
+        <p class="info-text"><i class="fas fa-info-circle"></i> Votre adresse email sera utilisée comme identifiant de connexion</p>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe *</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && registerForm.get('password')?.errors }"
+        />
+        <div *ngIf="submitted && registerForm.get('password')?.errors" class="invalid-feedback">
+          <div *ngIf="registerForm.get('password')?.errors?.['required']">Le mot de passe est requis</div>
+          <div *ngIf="registerForm.get('password')?.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirmation du mot de passe *</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && (registerForm.get('confirmPassword')?.errors || registerForm.hasError('passwordMismatch')) }"
+        />
+        <div *ngIf="submitted && (registerForm.get('confirmPassword')?.errors || registerForm.hasError('passwordMismatch'))" class="invalid-feedback">
+          <div *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">La confirmation du mot de passe est requise</div>
+          <div *ngIf="registerForm.hasError('passwordMismatch')">Les mots de passe ne correspondent pas</div>
+        </div>
+      </div>
+
+      <!-- Documents à télécharger -->
+      <div class="section-title">
+        <h3>Documents requis</h3>
+        <p>Veuillez télécharger les documents suivants (format PDF, JPG ou PNG, 2MB max)</p>
+      </div>
+
+      <div class="form-group">
+        <label for="identityDocument">Pièce d'identité *</label>
+        <div class="custom-file">
+          <input
+            type="file"
+            id="identityDocument"
+            class="custom-file-input"
+            (change)="onFileSelected($event, 'identityDocument')"
+            accept=".pdf,.jpg,.jpeg,.png"
+          />
+          <label class="custom-file-label" for="identityDocument">
+            {{ fileNames['identityDocument'] || 'Choisir un fichier' }}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="license">Licence professionnelle *</label>
+        <div class="custom-file">
+          <input
+            type="file"
+            id="license"
+            class="custom-file-input"
+            (change)="onFileSelected($event, 'license')"
+            accept=".pdf,.jpg,.jpeg,.png"
+          />
+          <label class="custom-file-label" for="license">
+            {{ fileNames['license'] || 'Choisir un fichier' }}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="professionalInsurance">Assurance professionnelle</label>
+        <div class="custom-file">
+          <input
+            type="file"
+            id="professionalInsurance"
+            class="custom-file-input"
+            (change)="onFileSelected($event, 'professionalInsurance')"
+            accept=".pdf,.jpg,.jpeg,.png"
+          />
+          <label class="custom-file-label" for="professionalInsurance">
+            {{ fileNames['professionalInsurance'] || 'Choisir un fichier (facultatif)' }}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="diploma">Diplôme *</label>
+        <div class="custom-file">
+          <input
+            type="file"
+            id="diploma"
+            class="custom-file-input"
+            (change)="onFileSelected($event, 'diploma')"
+            accept=".pdf,.jpg,.jpeg,.png"
+          />
+          <label class="custom-file-label" for="diploma">
+            {{ fileNames['diploma'] || 'Choisir un fichier' }}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="bankAccountNumber">Rib *</label>
+        <div class="custom-file">
+          <input
+            type="file"
+            id="bankAccountNumber"
+            class="custom-file-input"
+            (change)="onFileSelected($event, 'bankAccountNumber')"
+            accept=".pdf,.jpg,.jpeg,.png"
+          />
+          <label class="custom-file-label" for="bankAccountNumber">
+            {{ fileNames['bankAccountNumber'] || 'Choisir un fichier' }}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="isSubmitting">
+          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
+          S'inscrire
+        </button>
+      </div>
+
+      <div class="text-center mt-3">
+        <p>Vous avez déjà un compte? <a routerLink="/auth/login">Se connecter</a></p>
+      </div>
+    </form>
+  </div>
+</div>

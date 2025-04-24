@@ -1,0 +1,58 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2>Connexion ARMA-CARE</h2>
+    <p>Veuillez vous connecter pour accéder à votre compte</p>
+
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Email</label>
+        <input
+          type="email"
+          id="username"
+          formControlName="username"
+          placeholder="Votre adresse email"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && loginForm.get('username')?.errors }"
+        />
+        <div *ngIf="submitted && loginForm.get('username')?.errors" class="invalid-feedback">
+          <div *ngIf="loginForm.get('username')?.errors?.['required']">L'adresse email est requise</div>
+          <div *ngIf="loginForm.get('username')?.errors?.['email']">Veuillez entrer une adresse email valide</div>
+        </div>
+        <small class="form-text text-muted">Utilisez l'adresse email avec laquelle vous vous êtes inscrit</small>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && loginForm.get('password')?.errors }"
+        />
+        <div *ngIf="submitted && loginForm.get('password')?.errors" class="invalid-feedback">
+          <div *ngIf="loginForm.get('password')?.errors?.['required']">Le mot de passe est requis</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="isSubmitting">
+          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
+          Se connecter
+        </button>
+      </div>
+
+      <div class="mt-3 text-center">
+        <a routerLink="/auth/forgot-password">Mot de passe oublié?</a>
+      </div>
+
+      <div class="mt-3 text-center">
+        <p>Vous n'avez pas de compte? <a routerLink="/auth/register">S'inscrire</a></p>
+      </div>
+    </form>
+  </div>
+</div>

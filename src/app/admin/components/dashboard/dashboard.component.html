@@ -1,0 +1,138 @@
+<div class="admin-dashboard-container">
+  <div class="dashboard-header">
+    <h1>Tableau de bord administrateur</h1>
+    <div class="user-info">
+      <span>Administrateur ARMA-CARE</span>
+      <button class="btn btn-outline-danger" (click)="logout()">Déconnexion</button>
+    </div>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="dashboard-content" *ngIf="!loading && !error">
+    <div class="card professionals-card">
+      <div class="card-header">
+        <h3>Gestion des professionnels</h3>
+        <div class="tabs">
+          <button 
+            class="tab-btn" 
+            [class.active]="selectedTab === 'pending'"
+            (click)="changeTab('pending')">
+            En attente
+            <span class="badge" *ngIf="getPendingCount() > 0">
+              {{ getPendingCount() }}
+            </span>
+          </button>
+          <button 
+            class="tab-btn" 
+            [class.active]="selectedTab === 'verified'"
+            (click)="changeTab('verified')">
+            Vérifiés
+          </button>
+          <button 
+            class="tab-btn" 
+            [class.active]="selectedTab === 'rejected'"
+            (click)="changeTab('rejected')">
+            Rejetés
+          </button>
+          <button 
+            class="tab-btn" 
+            [class.active]="selectedTab === 'all'"
+            (click)="changeTab('all')">
+            Tous
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="empty-state" *ngIf="filteredProfessionals.length === 0">
+          <p>Aucun professionnel trouvé dans cette catégorie.</p>
+        </div>
+
+        <div class="professionals-list" *ngIf="filteredProfessionals.length > 0">
+          <div class="professional-item" *ngFor="let professional of filteredProfessionals">
+            <div class="professional-header">
+              <div class="professional-info">
+                <h4>Dr. {{ professional.firstName }} {{ professional.lastName }}</h4>
+                <span class="badge" [ngClass]="{
+                  'badge-pending': professional.accountStatus === AccountStatus.PENDING_VERIFICATION,
+                  'badge-verified': professional.accountStatus === AccountStatus.VERIFIED,
+                  'badge-rejected': professional.accountStatus === AccountStatus.REJECTED,
+                  'badge-suspended': professional.accountStatus === AccountStatus.SUSPENDED
+                }">
+                  {{ professional.accountStatus === AccountStatus.PENDING_VERIFICATION ? 'En attente' :
+                     professional.accountStatus === AccountStatus.VERIFIED ? 'Vérifié' :
+                     professional.accountStatus === AccountStatus.REJECTED ? 'Rejeté' :
+                     professional.accountStatus === AccountStatus.SUSPENDED ? 'Suspendu' : 'Inconnu' }}
+                </span>
+              </div>
+              <div class="professional-actions" *ngIf="professional.accountStatus === AccountStatus.PENDING_VERIFICATION">
+                <button class="btn btn-success btn-sm" (click)="approveProfessional(professional)">Approuver</button>
+                <button class="btn btn-danger btn-sm" (click)="rejectProfessional(professional, 'Documents incomplets ou invalides')">Rejeter</button>
+              </div>
+              <div class="professional-actions" *ngIf="professional.accountStatus === AccountStatus.VERIFIED">
+                <button class="btn btn-warning btn-sm" (click)="suspendProfessional(professional, 'Suspension administrative')">Suspendre</button>
+              </div>
+            </div>
+            
+            <div class="professional-details">
+              <div class="detail-item">
+                <span class="detail-label">Spécialité:</span>
+                <span class="detail-value">{{ professional.speciality }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Email:</span>
+                <span class="detail-value">{{ professional.email }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Téléphone:</span>
+                <span class="detail-value">{{ professional.phone }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Numéro d'enregistrement:</span>
+                <span class="detail-value">{{ professional.registrationNumber }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Date de demande:</span>
+                <span class="detail-value">{{ professional.statusChangeDate | date:'dd/MM/yyyy' }}</span>
+              </div>
+              <div class="detail-item" *ngIf="professional.statusChangeReason">
+                <span class="detail-label">Raison du changement:</span>
+                <span class="detail-value">{{ professional.statusChangeReason }}</span>
+              </div>
+            </div>
+            
+            <div class="professional-documents">
+              <h5>Documents</h5>
+              <div class="documents-list">
+                <div class="document-item" *ngIf="professional.identityDocumentPath">
+                  <span>Pièce d'identité</span>
+                  <button class="btn btn-link" (click)="viewDocument(professional.identityDocumentPath)">Voir</button>
+                </div>
+                <div class="document-item" *ngIf="professional.diplomaPath">
+                  <span>Diplôme</span>
+                  <button class="btn btn-link" (click)="viewDocument(professional.diplomaPath)">Voir</button>
+                </div>
+                <div class="document-item" *ngIf="professional.licensePath">
+                  <span>Licence professionnelle</span>
+                  <button class="btn btn-link" (click)="viewDocument(professional.licensePath)">Voir</button>
+                </div>
+                <div class="document-item" *ngIf="professional.professionalInsurancePath">
+                  <span>Assurance professionnelle</span>
+                  <button class="btn btn-link" (click)="viewDocument(professional.professionalInsurancePath)">Voir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

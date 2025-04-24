@@ -1,0 +1,276 @@
+<div class="home-container">
+  <!-- Section Hero -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>ARMA-CARE</h1>
+      <h2>Votre Santé, Notre Priorité</h2>
+      <p>La solution innovante pour la gestion du tiers-payant entre professionnels de santé et assurances</p>
+      <div class="cta-buttons">
+        <a routerLink="/auth/login" class="btn btn-primary">Se connecter</a>
+        <a routerLink="/auth/register" class="btn btn-outline">S'inscrire</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <!-- L'image sera définie en CSS -->
+    </div>
+  </section>
+
+  <!-- Section À propos -->
+  <section class="about-section">
+    <div class="container">
+      <h2>À propos d'ARMA-CARE</h2>
+      <p>ARMA-CARE est une plateforme innovante qui simplifie la gestion du tiers-payant entre les professionnels de santé et les assurances. Notre solution permet d'automatiser les demandes de remboursement, de suivre leur progression et d'accélérer les paiements.</p>
+      
+      <div class="stats-container">
+        <div class="stat-item">
+          <span class="stat-number">500+</span>
+          <span class="stat-label">Professionnels de santé</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10 000+</span>
+          <span class="stat-label">Patients satisfaits</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">14</span>
+          <span class="stat-label">Régions couvertes</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Fonctionnalités -->
+  <section class="features-section">
+    <div class="container">
+      <h2>Nos Services</h2>
+      <div class="features-grid">
+        <div class="feature-card" *ngFor="let feature of features">
+          <div class="feature-icon">
+            <i class="icon-{{feature.icon}}"></i>
+          </div>
+          <h3>{{feature.title}}</h3>
+          <p>{{feature.description}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Concept du tiers-payant -->
+  <section class="tiers-payant-section">
+    <div class="container">
+      <h2>Le concept du tiers-payant</h2>
+      <p class="section-subtitle">Comment fonctionne le système et quels sont ses avantages ?</p>
+      
+      <div class="concept-container">
+        <div class="concept-illustration">
+          <img src="assets/img/tiers-payant-schema.svg" alt="Schéma du tiers-payant" class="concept-image">
+        </div>
+        <div class="concept-steps">
+          <div class="concept-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3>Le patient consulte un professionnel</h3>
+              <p>Sans avancer les frais grâce au tiers-payant</p>
+            </div>
+          </div>
+          <div class="concept-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>Le professionnel transmet la demande</h3>
+              <p>Via la plateforme ARMA-CARE de manière sécurisée</p>
+            </div>
+          </div>
+          <div class="concept-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>L'assurance traite la demande</h3>
+              <p>Vérification et validation rapide des informations</p>
+            </div>
+          </div>
+          <div class="concept-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h3>Le professionnel est remboursé</h3>
+              <p>Délais raccourcis et suivi transparent</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="benefits-container">
+        <div class="benefit-card" *ngFor="let benefit of tiersBenefits">
+          <div class="benefit-icon">
+            <i class="icon-{{benefit.icon}}"></i>
+          </div>
+          <h3>{{benefit.title}}</h3>
+          <ul>
+            <li *ngFor="let item of benefit.items">{{item}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Témoignages -->
+  <section class="testimonials-section">
+    <div class="container">
+      <h2>Ce qu'ils disent de nous</h2>
+      <div class="testimonials-carousel">
+        <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+          <div class="testimonial-avatar">
+            <!-- Utiliser une image générique si l'avatar n'est pas disponible -->
+            <div class="avatar-placeholder">{{testimonial.name.charAt(0)}}</div>
+          </div>
+          <p class="testimonial-comment">"{{testimonial.comment}}"</p>
+          <div class="testimonial-author">
+            <h4>{{testimonial.name}}</h4>
+            <p>{{testimonial.role}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section contact pour assurances -->
+  <section class="contact-section">
+    <div class="container">
+      <h2>Vous êtes une assurance ?</h2>
+      <p class="section-subtitle">Contactez-nous pour intégrer notre réseau et simplifier vos remboursements</p>
+      
+      <div class="contact-container">
+        <div class="contact-info">
+          <h3>Pourquoi rejoindre notre réseau ?</h3>
+          <ul class="benefits-list">
+            <li><i class="icon-check-circle"></i> Traitement plus rapide des demandes</li>
+            <li><i class="icon-check-circle"></i> Réduction des erreurs et des fraudes</li>
+            <li><i class="icon-check-circle"></i> Interface dédiée pour votre équipe</li>
+            <li><i class="icon-check-circle"></i> Données analytiques précieuses</li>
+            <li><i class="icon-check-circle"></i> Support technique prioritaire</li>
+          </ul>
+          <div class="contact-direct">
+            <div class="contact-method">
+              <i class="icon-phone"></i>
+              <p>+33 1 23 45 67 89</p>
+            </div>
+            <div class="contact-method">
+              <i class="icon-envelope"></i>
+              <p>partenariats&#64;arma-care.com</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="contact-form">
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="insurance-form">
+            <div class="form-group">
+              <label for="companyName">Nom de l'entreprise *</label>
+              <input type="text" id="companyName" formControlName="companyName" class="form-control" placeholder="Votre entreprise">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contactName">Nom et prénom *</label>
+                <input type="text" id="contactName" formControlName="contactName" class="form-control" placeholder="Votre nom complet">
+              </div>
+              <div class="form-group">
+                <label for="position">Fonction *</label>
+                <input type="text" id="position" formControlName="position" class="form-control" placeholder="Votre poste">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email professionnel *</label>
+                <input type="email" id="email" formControlName="email" class="form-control" placeholder="exemple@entreprise.com">
+              </div>
+              <div class="form-group">
+                <label for="phone">Téléphone *</label>
+                <input type="tel" id="phone" formControlName="phone" class="form-control" placeholder="+33 1 23 45 67 89">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" formControlName="message" class="form-control" rows="4" placeholder="Détaillez votre besoin ou votre question"></textarea>
+            </div>
+            <div class="form-group checkbox">
+              <input type="checkbox" id="gdpr" formControlName="gdpr" class="form-checkbox">
+              <label for="gdpr">J'accepte que mes informations soient utilisées pour être recontacté dans le cadre de ma demande *</label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" [disabled]="contactForm.invalid || isSubmitting">
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
+              Envoyer ma demande
+            </button>
+            <p class="form-note">* Champs obligatoires | Nous vous répondrons sous 48h ouvrées</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section professionnels de santé -->
+  <section class="professionals-section">
+    <div class="container">
+      <h2>Vous êtes professionnel de santé ?</h2>
+      <p class="section-subtitle">Rejoignez notre réseau et simplifiez votre gestion du tiers-payant</p>
+      
+      <div class="professionals-content">
+        <div class="professionals-image">
+          <img src="assets/img/healthcare-professional.jpg" alt="Professionnel de santé" class="pro-image">
+        </div>
+        <div class="professionals-info">
+          <h3>Avantages pour les professionnels</h3>
+          <ul class="pro-benefits">
+            <li><i class="icon-clock"></i> <strong>Gain de temps :</strong> Réduction de 70% du temps consacré à la gestion administrative</li>
+            <li><i class="icon-euro-sign"></i> <strong>Remboursements plus rapides :</strong> Délais réduits à 7 jours en moyenne</li>
+            <li><i class="icon-chart-line"></i> <strong>Tableau de bord :</strong> Suivi en temps réel de vos demandes</li>
+            <li><i class="icon-users"></i> <strong>Fidélisation :</strong> Offrez le tiers-payant à vos patients sans contraintes</li>
+          </ul>
+          <div class="specialties">
+            <h4>Spécialités concernées</h4>
+            <div class="specialties-list">
+              <span class="specialty-tag">Médecins généralistes</span>
+              <span class="specialty-tag">Dentistes</span>
+              <span class="specialty-tag">Kinésithérapeutes</span>
+              <span class="specialty-tag">Infirmiers</span>
+              <span class="specialty-tag">Et plus...</span>
+            </div>
+          </div>
+          <div class="registration-cta">
+            <a routerLink="/auth/register" class="btn btn-primary">S'inscrire maintenant</a>
+            <p class="reg-note">Inscription gratuite et sans engagement</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Documentation et FAQ -->
+  <section class="faq-section">
+    <div class="container">
+      <h2>Questions fréquentes</h2>
+      <p class="section-subtitle">Trouvez rapidement des réponses à vos questions</p>
+      
+      <div class="faq-container">
+        <div class="accordion">
+          <div class="accordion-item" *ngFor="let item of faqItems">
+            <div class="accordion-header">
+              <h3>{{item.question}}</h3>
+              <i class="icon-chevron-down"></i>
+            </div>
+            <div class="accordion-body">
+              <p>{{item.answer}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Appel à l'action -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Prêt à simplifier votre gestion du tiers-payant ?</h2>
+      <p>Rejoignez les milliers de professionnels qui font confiance à ARMA-CARE.</p>
+      <div class="cta-buttons">
+        <a routerLink="/auth/register" class="btn btn-primary">Créer un compte</a>
+        <a routerLink="/auth/professional-register" class="btn btn-outline">Vous êtes un professionnel de santé ?</a>
+      </div>
+    </div>
+  </section>
+</div>
