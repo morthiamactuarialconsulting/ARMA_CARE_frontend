@@ -1,0 +1,15 @@
+<!-- Section Fonctionnalités -->
+<section class="features-section">
+  <div class="container">
+    <h2>Nos Services</h2>
+    <div class="features-grid">
+      <div class="feature-card" *ngFor="let feature of features">
+        <div class="feature-icon">
+          <i class="icon-{{feature.icon}}"></i>
+        </div>
+        <h3>{{feature.title}}</h3>
+        <p>{{feature.description}}</p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -397,6 +397,14 @@ server {
 
 ## Journal des modifications
 
+### 26 avril 2025
+- **Amélioration de la section Hero** :
+  - Implémentation correcte de l'image d'arrière-plan avec `background-attachment: fixed`
+  - Ajustement de l'overlay pour une meilleure visibilité (opacité réduite à 0.048)
+  - Amélioration des cartes de fonctionnalités avec effets de transparence et flou d'arrière-plan
+  - Optimisation du responsive design pour les tablettes et mobiles
+  - Centrage des éléments avec Flexbox pour une meilleure présentation
+
 ### 25 avril 2025
 
 - **Mise à jour majeure de la page d'accueil** : Intégration des sections présentant le système de tiers-payant, d'un formulaire de contact pour les assurances et d'informations destinées aux professionnels de santé.

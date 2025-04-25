@@ -1,0 +1,19 @@
+<!-- Section Témoignages -->
+<section class="testimonials-section">
+  <div class="container">
+    <h2>Ce qu'ils disent de nous</h2>
+    <div class="testimonials-carousel">
+      <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+        <div class="testimonial-avatar">
+          <!-- Utiliser une image générique si l'avatar n'est pas disponible -->
+          <div class="avatar-placeholder">{{testimonial.name.charAt(0)}}</div>
+        </div>
+        <p class="testimonial-comment">"{{testimonial.comment}}"</p>
+        <div class="testimonial-author">
+          <h4>{{testimonial.name}}</h4>
+          <p>{{testimonial.role}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

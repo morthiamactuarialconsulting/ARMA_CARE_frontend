@@ -1,0 +1,55 @@
+<!-- Concept du tiers-payant -->
+<section class="tiers-payant-section">
+  <div class="container">
+    <h2>Le concept du tiers-payant</h2>
+    <p class="section-subtitle">Comment fonctionne le système et quels sont ses avantages ?</p>
+    
+    <div class="concept-container">
+      <div class="concept-illustration">
+        <img src="assets/img/tiers-payant-schema.svg" alt="Schéma du tiers-payant" class="concept-image">
+      </div>
+      <div class="concept-steps">
+        <div class="concept-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Le patient consulte un professionnel</h3>
+            <p>Sans avancer les frais grâce au tiers-payant</p>
+          </div>
+        </div>
+        <div class="concept-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Le professionnel transmet la demande</h3>
+            <p>Via la plateforme ARMA-CARE de manière sécurisée</p>
+          </div>
+        </div>
+        <div class="concept-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>L'assurance traite la demande</h3>
+            <p>Vérification et validation rapide des informations</p>
+          </div>
+        </div>
+        <div class="concept-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Le professionnel est remboursé</h3>
+            <p>Délais raccourcis et suivi transparent</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="benefits-container">
+      <div class="benefit-card" *ngFor="let benefit of tiersBenefits">
+        <div class="benefit-icon">
+          <i class="icon-{{benefit.icon}}"></i>
+        </div>
+        <h3>{{benefit.title}}</h3>
+        <ul>
+          <li *ngFor="let item of benefit.items">{{item}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

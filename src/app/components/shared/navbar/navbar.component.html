@@ -1,0 +1,80 @@
+<!-- Backdrop pour fermer le menu mobile -->
+<div class="navbar-backdrop" [class.visible]="menuOpen" (click)="closeMenu()"></div>
+
+<nav class="navbar" [class.scrolled]="scrolled" [class.menu-open]="menuOpen">
+  <div class="container">
+    <div class="navbar-brand">
+      <a routerLink="/" class="logo-link">
+         <svg class="logo" width="180" height="45" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg">
+           <!-- ARMA en violet -->
+           <text x="5" y="45" font-family="Arial, sans-serif" font-weight="800" font-size="45" fill="#cb6ce6" letter-spacing="-1">ARMA</text>
+          <!-- CARE en vert -->
+           <text x="150" y="45" font-family="Arial, sans-serif" font-weight="800" font-size="45" fill="#7AE642" letter-spacing="-1">CARE</text>
+         </svg>
+      </a>
+      <button class="menu-toggle" (click)="toggleMenu()" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    
+    <div class="navbar-content" [class.open]="menuOpen">
+      <ul class="nav-links">
+        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Accueil</a></li>
+        <li><a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">À propos</a></li>
+        <li><a routerLink="/services" routerLinkActive="active" (click)="closeMenu()">Services</a></li>
+        <li><a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">Contact</a></li>
+        <li class="dropdown">
+          <a (click)="toggleDropdown($event)" class="dropdown-toggle">Ressources <i class="arrow-down"></i></a>
+          <ul class="dropdown-menu" [class.open]="dropdownOpen">
+            <li><a routerLink="/faq" routerLinkActive="active" (click)="closeMenu()">FAQ</a></li>
+            <li><a routerLink="/docs" routerLinkActive="active" (click)="closeMenu()">Documentation</a></li>
+          </ul>
+        </li>
+      </ul>
+      
+      <!-- Boutons d'authentification pour utilisateurs non connectés -->
+      <div class="auth-buttons" *ngIf="!isLoggedIn()">
+        <a routerLink="/auth/login" class="btn btn-outline" (click)="closeMenu()">Se connecter</a>
+        <a routerLink="/auth/register" class="btn btn-primary" (click)="closeMenu()">S'inscrire</a>
+      </div>
+      
+      <!-- Menu utilisateur pour utilisateurs connectés -->
+      <div class="user-menu" *ngIf="isLoggedIn()">
+        <div class="user-dropdown" [class.open]="userDropdownOpen">
+          <a (click)="toggleUserDropdown($event)" class="user-toggle">
+            <span class="avatar">{{ getCurrentUser()?.username?.charAt(0).toUpperCase() }}</span>
+            <span class="username">{{ getCurrentUser()?.username }}</span>
+            <i class="arrow-down"></i>
+          </a>
+          <ul class="dropdown-menu" [class.open]="userDropdownOpen">
+            <li>
+              <a routerLink="/profile" (click)="closeMenu()">
+                <i class="icon-user"></i> Mon profil
+              </a>
+            </li>
+            <!-- Option conditionnelle pour les professionnels de santé -->
+            <li *ngIf="hasRole('ROLE_PROFESSIONAL')">
+              <a routerLink="/professional/dashboard" (click)="closeMenu()">
+                <i class="icon-dashboard"></i> Tableau de bord
+              </a>
+            </li>
+            <!-- Option conditionnelle pour les administrateurs -->
+            <li *ngIf="hasRole('ROLE_ADMIN')">
+              <a routerLink="/admin/dashboard" (click)="closeMenu()">
+                <i class="icon-shield"></i> Administration
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a (click)="logout()" class="logout-link">
+                <i class="icon-logout"></i> Déconnexion
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

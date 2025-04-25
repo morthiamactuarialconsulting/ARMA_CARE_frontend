@@ -1,0 +1,21 @@
+<!-- Documentation et FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <h2>Questions fréquentes</h2>
+    <p class="section-subtitle">Trouvez rapidement des réponses à vos questions</p>
+    
+    <div class="faq-container">
+      <div class="accordion">
+        <div class="accordion-item" *ngFor="let item of faqItems">
+          <div class="accordion-header">
+            <h3>{{item.question}}</h3>
+            <i class="icon-chevron-down"></i>
+          </div>
+          <div class="accordion-body">
+            <p>{{item.answer}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

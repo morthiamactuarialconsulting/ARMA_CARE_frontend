@@ -1,0 +1,518 @@
+// Variables
+$primary-color: #cb6ce6;
+$text-color: #333;
+$light-gray: #f5f5f5;
+$medium-gray: #e0e0e0;
+$dark-gray: #555;
+$white: #fff;
+$transition-speed: 0.3s;
+$box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+// Navbar
+.navbar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 70px;
+  background-color: rgba($white, 1);
+  z-index: 1000;
+  transition: all $transition-speed ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  
+  @media (max-width: 992px) {
+    padding: 0.5rem 0;
+  }
+  
+  // Navbar quand la page défile
+  &.scrolled {
+    height: 70px;
+    box-shadow: $box-shadow;
+    
+    .logo {
+      height: 38px;
+      
+      @media (max-width: 768px) {
+        height: 35px;
+      }
+      
+      @media (max-width: 576px) {
+        height: 32px;
+      }
+    }
+  }
+  
+  // Container
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: nowrap; // Empêcher le retour à la ligne des éléments
+    
+    @media (max-width: 992px) {
+      padding: 0 0.5rem 0 1.5rem; // Moins de padding à droite
+      justify-content: space-between;
+    }
+  }
+  
+  // Navbar brand (logo et toggle)
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    z-index: 1010;
+    
+    a {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo-link {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+    
+    @media (max-width: 992px) {
+      justify-content: space-between;
+      width: 100%;
+      margin-right: 10px;
+    }
+    
+    .logo {
+      width: auto;
+      height: 38px;
+      transition: all $transition-speed ease;
+      
+      @media (max-width: 768px) {
+        height: 40px;
+      }
+      
+      @media (max-width: 576px) {
+        height: 35px;
+      }
+    }
+    
+    // Bouton de menu hamburger
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      margin-left: 15px;
+      position: relative;
+      z-index: 1010;
+      
+      span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        margin: 5px 0;
+        background-color: $text-color;
+        transition: all $transition-speed ease;
+      }
+      
+      @media (max-width: 992px) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: auto; // Pousse le bouton à droite
+        padding: 12px;
+        margin-right: 15px; // Plus d'espace à droite
+      }
+    }
+  }
+  
+  // Le contenu principal de la navbar
+  .navbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; // Aligner les éléments à droite
+    flex: 1; // Prendre tout l'espace disponible
+    margin-left: 20px; // Espace entre le logo et les liens
+    
+    @media (max-width: 992px) {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      height: 100vh;
+      background-color: $white;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 100px 2rem 2rem;
+      transition: all 0.4s ease;
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      margin-left: 0;
+      z-index: 1009; // Pour être sous le bouton mais au-dessus du reste
+      
+      &.open {
+        right: 0;
+      }
+    }
+  }
+  
+  // État quand le menu mobile est ouvert
+  &.menu-open {
+    .menu-toggle {
+      span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      
+      span:nth-child(2) {
+        opacity: 0;
+      }
+      
+      span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+    }
+  }
+  
+  // Liste des liens de navigation
+  .nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center; // Aligner verticalement les éléments
+    
+    @media (max-width: 992px) {
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 2rem;
+      align-items: flex-start;
+    }
+    
+    li {
+      margin: 0 1rem;
+      position: relative;
+      
+      @media (max-width: 992px) {
+        margin: 0;
+        width: 100%;
+        border-bottom: 1px solid $medium-gray;
+      }
+      
+      // Lien normal
+      a {
+        color: $text-color;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5rem 0;
+        display: block;
+        position: relative;
+        transition: color $transition-speed ease;
+        
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background-color: $primary-color;
+          transition: width $transition-speed ease;
+        }
+        
+        &:hover, &.active {
+          color: $primary-color;
+          
+          &:after {
+            width: 100%;
+          }
+        }
+        
+        @media (max-width: 992px) {
+          padding: 1rem 0;
+          font-size: 1.1rem;
+          
+          &:after {
+            display: none;
+          }
+        }
+      }
+      
+      // Menu déroulant
+      &.dropdown {
+        .dropdown-toggle {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          
+          .arrow-down {
+            margin-left: 5px;
+            border: solid $text-color;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(45deg);
+            transition: transform $transition-speed ease;
+          }
+          
+          &:hover .arrow-down {
+            border-color: $primary-color;
+          }
+        }
+        
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          min-width: 200px;
+          padding: 0.5rem 0;
+          background-color: $white;
+          border-radius: 4px;
+          box-shadow: $box-shadow;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(10px);
+          transition: all $transition-speed ease;
+          z-index: 1020;
+          
+          &.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+          }
+          
+          li {
+            margin: 0;
+            width: 100%;
+            
+            a {
+              padding: 0.75rem 1.5rem;
+              display: block;
+              white-space: nowrap;
+              
+              &:hover {
+                background-color: $light-gray;
+              }
+            }
+          }
+          
+          @media (max-width: 992px) {
+            position: static;
+            box-shadow: none;
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height $transition-speed ease;
+            padding: 0;
+            margin-left: 1rem;
+            
+            &.open {
+              max-height: 200px;
+            }
+            
+            li a {
+              padding: 0.75rem 1rem;
+            }
+          }
+        }
+        
+        @media (max-width: 992px) {
+          .dropdown-toggle .arrow-down {
+            transform: rotate(-45deg);
+          }
+          
+          &.open .dropdown-toggle .arrow-down {
+            transform: rotate(45deg);
+          }
+        }
+      }
+    }
+  }
+  
+  // Boutons d'authentification
+  .auth-buttons {
+    display: flex;
+    align-items: center;
+    margin-left: 1.5rem; // Augmenter l'espace avec les liens de navigation
+    white-space: nowrap; // Empêcher le retour à la ligne des boutons
+    
+    @media (max-width: 992px) {
+      flex-direction: column;
+      width: 100%;
+      margin-left: 0;
+      margin-top: 1rem;
+    }
+    
+    a {
+      margin-left: 0.75rem; // Réduire légèrement l'espace entre les boutons
+      padding: 0.5rem 1.25rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 500;
+      display: inline-flex; // Assurer un bon alignement
+      align-items: center;
+      justify-content: center;
+      transition: all $transition-speed ease;
+      
+      &.btn-outline {
+        color: $primary-color;
+        border: 1px solid $primary-color;
+        background-color: transparent;
+        
+        &:hover {
+          background-color: rgba($primary-color, 0.1);
+        }
+      }
+      
+      &.btn-primary {
+        color: $white;
+        background-color: $primary-color;
+        border: 1px solid $primary-color;
+        
+        &:hover {
+          background-color: darken($primary-color, 10%);
+          border-color: darken($primary-color, 10%);
+        }
+      }
+      
+      @media (max-width: 992px) {
+        margin: 0.5rem 0;
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+  
+  // Menu utilisateur pour les utilisateurs connectés
+  .user-menu {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+    
+    @media (max-width: 992px) {
+      width: 100%;
+      margin-left: 0;
+    }
+    
+    .user-dropdown {
+      position: relative;
+      
+      @media (max-width: 992px) {
+        width: 100%;
+      }
+      
+      // Bouton de toggle utilisateur
+      .user-toggle {
+        display: flex;
+        align-items: center;
+        padding: 0.25rem 0.5rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all $transition-speed ease;
+        background-color: rgba($primary-color, 0.1);
+        
+        &:hover {
+          background-color: rgba($primary-color, 0.15);
+        }
+        
+        // Avatar de l'utilisateur
+        .avatar {
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background-color: $primary-color;
+          color: $white;
+          font-weight: 600;
+          margin-right: 0.5rem;
+        }
+        
+        // Nom d'utilisateur
+        .username {
+          font-weight: 500;
+          color: $text-color;
+          margin-right: 0.5rem;
+          max-width: 120px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          
+          @media (max-width: 992px) {
+            max-width: none;
+          }
+        }
+        
+        // Flèche de menu déroulant
+        .arrow-down {
+          margin-left: 5px;
+          border: solid $text-color;
+          border-width: 0 2px 2px 0;
+          display: inline-block;
+          padding: 3px;
+          transform: rotate(45deg);
+          transition: transform $transition-speed ease;
+        }
+        
+        @media (max-width: 992px) {
+          width: 100%;
+          justify-content: space-between;
+          padding: 0.5rem;
+        }
+      }
+      
+      // Menu déroulant utilisateur
+      .dropdown-menu {
+        min-width: 220px;
+
+        li {
+          &.divider {
+            border-top: 1px solid $medium-gray;
+            margin: 0.5rem 0;
+          }
+          
+          a {
+            display: flex;
+            align-items: center;
+            
+            i {
+              margin-right: 0.5rem;
+              font-size: 1.1rem;
+              color: $dark-gray;
+            }
+            
+            &.logout-link {
+              color: #e74c3c; // Rouge pour la déconnexion
+              
+              &:hover {
+                background-color: rgba(#e74c3c, 0.1);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Un élément div transparent pour fermer le menu quand on clique en dehors
+.navbar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 990;
+  opacity: 0;
+  visibility: hidden;
+  transition: all $transition-speed ease;
+  
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+}
