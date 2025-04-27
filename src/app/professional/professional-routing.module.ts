@@ -7,7 +7,8 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: ProfessionalDashboardComponent,
-    canActivate: [() => professionalGuard()]
+    canActivate: [() => professionalGuard()],
+    data: { preload: true } // Préchargement pour améliorer la performance
   },
   {
     path: '',

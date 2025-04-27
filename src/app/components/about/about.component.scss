@@ -1,0 +1,156 @@
+.about-section {
+  padding: 80px 0;
+  position: relative;
+  background-color: #fff;
+  color: #333;
+  
+  .container {
+    position: relative;
+    z-index: 2;
+  }
+  
+  // Styles pour l'image à gauche
+  .about-image {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    margin-bottom: 30px;
+    
+    img {
+      width: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    // Bouton de lecture
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px;
+      height: 70px;
+      background-color: #cb6ce6;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background-color: #cb6ce6;
+        transform: translate(-50%, -50%) scale(1.1);
+        box-shadow: 0 0 15px #cb6ce680;
+      }
+    }
+  }
+  
+  // Styles pour le contenu à droite
+  .about-content {
+    padding: 20px 0 20px 20px;
+    
+    @media (max-width: 992px) {
+      padding: 20px 0;
+    }
+    
+    h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #cb6ce6;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -10px;
+        width: 50px;
+        height: 2px;
+        background-color: #cb6ce6;
+      }
+    }
+    
+    .about-description {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      color: #555;
+    }
+  }
+  
+  // Styles pour les éléments de fonctionnalités
+  .feature-items {
+    margin-top: 30px;
+    
+    .feature-item {
+      display: flex;
+      margin-bottom: 30px;
+      
+      .feature-icon {
+        flex: 0 0 60px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        color: #7AE642;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-right: 15px;
+        
+        &.blue {
+          color: #7AE642;
+        }
+      }
+      
+      .feature-text {
+        flex: 1;
+        
+        h3 {
+          font-size: 18px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 8px;
+        }
+        
+        p {
+          font-size: 14px;
+          color: #666;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+  
+  // Styles responsive
+  @media (max-width: 992px) {
+    .about-content {
+      margin-top: 30px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 60px 0;
+    
+    .about-content {
+      h2 {
+        font-size: 28px;
+      }
+    }
+    
+    .feature-item {
+      flex-direction: column;
+      
+      .feature-icon {
+        margin-bottom: 15px;
+        margin-right: 0;
+      }
+    }
+  }
+}

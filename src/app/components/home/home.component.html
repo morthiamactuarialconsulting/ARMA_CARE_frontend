@@ -1,37 +1,55 @@
 <div class="home-container">
   <!-- Section Hero -->
-  <app-hero></app-hero>
+  <div data-aos="fade-down" data-aos-duration="1000">
+    <app-hero></app-hero>
+  </div>
 
   <!-- Section À propos et Fonctionnalités combinées -->
   <div class="info-section">
     <!-- À propos -->
-    <app-about></app-about>
+    <div data-aos="fade-right" data-aos-delay="100">
+      <app-about></app-about>
+    </div>
 
     <!-- Fonctionnalités - utilisation du composant features existant pour éviter la redondance avec 'services' -->
-    <app-features></app-features>
+    <div data-aos="fade-left" data-aos-delay="200">
+      <app-features></app-features>
+    </div>
   </div>
 
   <!-- Concept du tiers-payant -->
-  <app-tiers-payant></app-tiers-payant>
+  <div data-aos="fade-up" data-aos-duration="800" data-aos-offset="200">
+    <app-tiers-payant></app-tiers-payant>
+  </div>
 
   <!-- Section principale avec témoignages et section pro de santé -->
   <div class="main-section">
-    <!-- Section Témoignages -->
-    <app-testimonials></app-testimonials>
-
     <!-- Section professionnels de santé -->
-    <app-professionals></app-professionals>
+    <div data-aos="fade-right" data-aos-delay="100" data-aos-duration="1000">
+      <app-professionals></app-professionals>
+    </div>
     
     <!-- Section contact pour assurances -->
-    <app-contact></app-contact>
+    <div data-aos="fade-left" data-aos-delay="150" data-aos-duration="1000">
+      <app-contact></app-contact>
+    </div>
+
+    <!-- Section Témoignages -->
+    <div data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
+      <app-testimonials></app-testimonials>
+    </div>
   </div>
 
   <!-- Section finale combinant FAQ et CTA -->
   <div class="final-section">
     <!-- Documentation et FAQ -->
-    <app-faq></app-faq>
+    <div data-aos="fade-right" data-aos-offset="200">
+      <app-faq></app-faq>
+    </div>
 
     <!-- Section Appel à l'action -->
-    <app-cta></app-cta>
+    <div data-aos="zoom-in" data-aos-delay="100" data-aos-duration="800">
+      <app-cta></app-cta>
+    </div>
   </div>
 </div>

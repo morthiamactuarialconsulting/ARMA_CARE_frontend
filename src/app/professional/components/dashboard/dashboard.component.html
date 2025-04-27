@@ -1,25 +1,40 @@
 <div class="dashboard-container">
+  <!-- Message de bienvenue temporaire -->
+  <div class="welcome-message" *ngIf="welcomeMessage">
+    <div class="welcome-content">
+      <i class="bi bi-check-circle-fill"></i>
+      <span>Connexion réussie ! Bienvenue, {{ userName }}</span>
+    </div>
+  </div>
+
   <div class="dashboard-header">
     <h1>Tableau de bord professionnel</h1>
     <div class="user-info">
       <span *ngIf="professional">Bienvenue, Dr. {{ professional.firstName }} {{ professional.lastName }}</span>
-      <button class="btn btn-outline-danger" (click)="logout()">Déconnexion</button>
+      <button class="btn btn-logout" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i> Déconnexion
+      </button>
     </div>
   </div>
 
-  <div class="loading-spinner" *ngIf="loading">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Chargement...</span>
+  <div class="loading-container" *ngIf="loading">
+    <div class="spinner">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
     </div>
+    <p>Chargement de vos informations professionnelles...</p>
   </div>
 
   <div class="error-message" *ngIf="error">
-    {{ error }}
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <span>{{ error }}</span>
   </div>
 
   <div class="dashboard-content" *ngIf="!loading && !error && professional">
     <div class="card status-card">
       <div class="card-header">
+        <i class="bi bi-shield-check"></i>
         <h3>Statut du compte</h3>
       </div>
       <div class="card-body">
@@ -29,10 +44,19 @@
           'status-rejected': professional.accountStatus === 'REJECTED',
           'status-suspended': professional.accountStatus === 'SUSPENDED'
         }">
-          {{ professional.accountStatus === 'PENDING_VERIFICATION' ? 'En attente de vérification' :
-             professional.accountStatus === 'VERIFIED' ? 'Vérifié' :
-             professional.accountStatus === 'REJECTED' ? 'Rejeté' :
-             professional.accountStatus === 'SUSPENDED' ? 'Suspendu' : 'Inconnu' }}
+          <i class="bi" [ngClass]="{
+            'bi-hourglass-split': professional.accountStatus === 'PENDING_VERIFICATION',
+            'bi-check-circle-fill': professional.accountStatus === 'VERIFIED',
+            'bi-x-circle-fill': professional.accountStatus === 'REJECTED',
+            'bi-pause-circle-fill': professional.accountStatus === 'SUSPENDED',
+            'bi-question-circle-fill': !professional.accountStatus
+          }"></i>
+          <span>
+            {{ professional.accountStatus === 'PENDING_VERIFICATION' ? 'En attente de vérification' :
+               professional.accountStatus === 'VERIFIED' ? 'Vérifié' :
+               professional.accountStatus === 'REJECTED' ? 'Rejeté' :
+               professional.accountStatus === 'SUSPENDED' ? 'Suspendu' : 'Inconnu' }}
+          </span>
         </div>
         <p *ngIf="professional.accountStatus === 'PENDING_VERIFICATION'">
           Votre compte est en cours de vérification par notre équipe administrative. Veuillez patienter.
@@ -48,32 +72,59 @@
 
     <div class="card info-card">
       <div class="card-header">
+        <i class="bi bi-person-vcard"></i>
         <h3>Informations professionnelles</h3>
       </div>
       <div class="card-body">
         <div class="info-item">
-          <span class="info-label">Spécialité:</span>
+          <span class="info-label"><i class="bi bi-briefcase-fill"></i> Spécialité:</span>
           <span class="info-value">{{ professional.speciality }}</span>
         </div>
         <div class="info-item">
-          <span class="info-label">Email:</span>
+          <span class="info-label"><i class="bi bi-envelope-fill"></i> Email:</span>
           <span class="info-value">{{ professional.email || 'Non renseigné' }}</span>
         </div>
         <div class="info-item">
-          <span class="info-label">Téléphone:</span>
+          <span class="info-label"><i class="bi bi-telephone-fill"></i> Téléphone:</span>
           <span class="info-value">{{ professional.phone || 'Non renseigné' }}</span>
         </div>
         <div class="info-item">
-          <span class="info-label">Adresse:</span>
+          <span class="info-label"><i class="bi bi-geo-alt-fill"></i> Adresse:</span>
           <span class="info-value">{{ professional.address || 'Non renseignée' }}</span>
         </div>
         <div class="info-item">
-          <span class="info-label">Ville:</span>
+          <span class="info-label"><i class="bi bi-building-fill"></i> Ville:</span>
           <span class="info-value">{{ professional.city || 'Non renseignée' }}</span>
         </div>
       </div>
     </div>
 
-    <!-- Ici, nous pouvons ajouter d'autres sections selon les besoins comme les patients, factures, etc. -->
+    <!-- Section des actions rapides -->
+    <div class="card actions-card">
+      <div class="card-header">
+        <i class="bi bi-lightning-charge-fill"></i>
+        <h3>Actions rapides</h3>
+      </div>
+      <div class="card-body">
+        <div class="quick-actions">
+          <button class="action-btn">
+            <i class="bi bi-file-earmark-medical-fill"></i>
+            <span>Gestion du tiers-payant</span>
+          </button>
+          <button class="action-btn">
+            <i class="bi bi-folder-fill"></i>
+            <span>Documents</span>
+          </button>
+          <button class="action-btn">
+            <i class="bi bi-graph-up"></i>
+            <span>Statistiques</span>
+          </button>
+          <button class="action-btn">
+            <i class="bi bi-gear-fill"></i>
+            <span>Paramètres</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -393,7 +393,68 @@ $box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     
     @media (max-width: 992px) {
       width: 100%;
-      margin-left: 0;
+    }
+    
+    /* Bouton de tableau de bord - Style amélioré */
+    .dashboard-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #cb6ce6 0%, #7AE642 100%);
+      border: none;
+      padding: 10px 16px;
+      margin-right: 15px;
+      border-radius: 25px;
+      color: white;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      position: relative;
+      z-index: 100;
+      
+      /* Effet lumineux autour du bouton */
+      &:before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        z-index: -1;
+        background: linear-gradient(45deg, #cb6ce6, #7AE642, #cb6ce6);
+        background-size: 200%;
+        border-radius: 26px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        
+        &:before {
+          opacity: 0.6;
+          animation: glowing 1.5s linear infinite;
+        }
+      }
+      
+      i {
+        font-size: 1.25rem;
+        color: white;
+      }
+      
+      span {
+        font-size: 0.95rem;
+        white-space: nowrap;
+      }
+    }
+    
+    @keyframes glowing {
+      0% { background-position: 0 0; }
+      50% { background-position: 100% 0; }
+      100% { background-position: 0 0; }
     }
     
     .user-dropdown {
@@ -414,87 +475,97 @@ $box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         background-color: rgba($primary-color, 0.1);
         
         &:hover {
-          background-color: rgba($primary-color, 0.15);
+          background-color: rgba(203, 108, 230, 0.1);
+          border-color: #cb6ce6;
         }
         
-        // Avatar de l'utilisateur
         .avatar {
-          width: 36px;
-          height: 36px;
+          background: linear-gradient(135deg, #cb6ce6 0%, #7AE642 100%);
+          color: white;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 50%;
-          background-color: $primary-color;
-          color: $white;
-          font-weight: 600;
-          margin-right: 0.5rem;
+          font-weight: bold;
+          margin-right: 8px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         
-        // Nom d'utilisateur
         .username {
+          margin: 0 8px;
           font-weight: 500;
-          color: $text-color;
-          margin-right: 0.5rem;
-          max-width: 120px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          
-          @media (max-width: 992px) {
-            max-width: none;
-          }
+          color: #333;
         }
         
-        // Flèche de menu déroulant
-        .arrow-down {
-          margin-left: 5px;
-          border: solid $text-color;
-          border-width: 0 2px 2px 0;
-          display: inline-block;
-          padding: 3px;
-          transform: rotate(45deg);
-          transition: transform $transition-speed ease;
-        }
-        
-        @media (max-width: 992px) {
-          width: 100%;
-          justify-content: space-between;
-          padding: 0.5rem;
+        i {
+          color: #cb6ce6;
         }
       }
       
-      // Menu déroulant utilisateur
       .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
         min-width: 220px;
-
-        li {
-          &.divider {
-            border-top: 1px solid $medium-gray;
-            margin: 0.5rem 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        display: none;
+        z-index: 1000;
+        padding: 0.75rem 0;
+        margin-top: 12px;
+        border-top: 3px solid #cb6ce6;
+        
+        &.show {
+          display: block;
+          animation: fadeIn 0.2s ease-in-out;
+        }
+        
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1.25rem;
+          color: #333;
+          transition: all 0.2s ease;
+          cursor: pointer;
+          
+          &:hover {
+            background-color: rgba(203, 108, 230, 0.1);
+            color: #cb6ce6;
           }
           
-          a {
-            display: flex;
-            align-items: center;
+          i {
+            color: #cb6ce6;
+          }
+        }
+        
+        .dropdown-divider {
+          height: 1px;
+          background-color: #e9ecef;
+          margin: 0.5rem 1rem;
+        }
+        
+        .logout-link {
+          color: #333;
+          
+          &:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
             
             i {
-              margin-right: 0.5rem;
-              font-size: 1.1rem;
-              color: $dark-gray;
-            }
-            
-            &.logout-link {
-              color: #e74c3c; // Rouge pour la déconnexion
-              
-              &:hover {
-                background-color: rgba(#e74c3c, 0.1);
-              }
+              color: #dc3545;
             }
           }
         }
       }
     }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 }
 

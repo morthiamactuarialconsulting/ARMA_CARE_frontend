@@ -1,0 +1,204 @@
+.testimonials-section {
+  padding: 90px 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+  
+  h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #cb6ce6;
+    margin-bottom: 60px;
+    position: relative;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, #7AE642, #cb6ce6);
+      border-radius: 3px;
+    }
+  }
+  
+  .testimonials-carousel {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  
+  .testimonial-card {
+    background-color: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    max-width: 350px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards;
+    min-height: 380px;
+    
+    &:nth-child(1) { animation-delay: 0.1s; }
+    &:nth-child(2) { animation-delay: 0.3s; }
+    &:nth-child(3) { animation-delay: 0.5s; }
+    
+    &:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+    
+    &:before {
+      content: '\201C';
+      font-size: 120px;
+      line-height: 0;
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      color: rgba(203, 108, 230, 0.1);
+      font-family: Georgia, serif;
+    }
+    
+    .testimonial-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #7AE642 0%, #cb6ce6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 5px 15px rgba(203, 108, 230, 0.3);
+      
+      .avatar-placeholder {
+        color: white;
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 1;
+      }
+    }
+    
+    .testimonial-comment {
+      font-style: italic;
+      margin-bottom: 20px;
+      color: #2e2d2d;
+      line-height: 1.6;
+      font-size: 1.05rem;
+    }
+    
+    .testimonial-author {
+      margin-top: auto;
+      
+      h4 {
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+        color: #222930;
+      }
+      
+      p {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin: 0;
+      }
+    }
+    
+    .testimonial-rating {
+      margin-top: 15px;
+      display: flex;
+      gap: 3px;
+      
+      i {
+        color: #FFD700;
+        font-size: 1rem;
+      }
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    .testimonials-carousel {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .testimonial-card {
+      margin-bottom: 30px;
+    }
+  }
+  
+  .testimonial-cta {
+    text-align: center;
+    margin-top: 40px;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    
+    p {
+      font-size: 1.1rem;
+      color: #222930;
+      margin-bottom: 20px;
+    }
+    
+    .btn-testimonial {
+      display: inline-block;
+      background: linear-gradient(135deg, #7AE642 0%, #5bc21c 100%);
+      color: white;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 5px 15px rgba(122, 230, 66, 0.3);
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(122, 230, 66, 0.4);
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 70px 0;
+    
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 50px;
+    }
+    
+    .testimonial-card {
+      padding: 25px;
+    }
+    
+    .testimonial-cta {
+      padding: 20px;
+      
+      p {
+        font-size: 1rem;
+      }
+    }
+  }
+  
+  // Animation
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

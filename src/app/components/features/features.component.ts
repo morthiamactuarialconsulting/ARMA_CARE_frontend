@@ -5,6 +5,7 @@ interface Feature {
   icon: string;
   title: string;
   description: string;
+  primary?: boolean;
 }
 
 @Component({
@@ -24,24 +25,40 @@ export class FeaturesComponent implements OnInit {
   loadFeatures(): void {
     this.features = [
       {
-        icon: 'wallet',
-        title: 'Tiers-payant simplifié',
-        description: 'Automatisez vos demandes de remboursement et suivez leur progression en temps réel.'
+        icon: 'heart-pulse',
+        title: 'Gestion du tiers-payant',
+        description: 'Solution complète pour automatiser vos demandes de remboursement et suivre leur progression en temps réel.',
+        primary: false
       },
       {
-        icon: 'dashboard',
-        title: 'Tableau de bord',
-        description: 'Visualisez l\'ensemble de vos demandes et recevez des alertes sur leur statut.'
+        icon: 'clipboard2-data',
+        title: 'Tableau de bord intelligent',
+        description: 'Visualisez l\'ensemble de vos dossiers, analysez vos performances et identifiez les opportunités d\'optimisation.',
+        primary: true
       },
       {
-        icon: 'document',
+        icon: 'file-earmark-text',
         title: 'Gestion documentaire',
-        description: 'Stockez et organisez tous vos documents de manière sécurisée et accessible.'
+        description: 'Stockez, organisez et partagez tous vos documents médicaux et administratifs de manière sécurisée.',
+        primary: false
       },
       {
-        icon: 'user-shield',
-        title: 'Sécurité des données',
-        description: 'Protection des données conforme au RGPD et aux standards de sécurité les plus stricts.'
+        icon: 'hourglass-split',
+        title: 'Suivi des délais',
+        description: 'Anticipez les retards de paiement et gérez efficacement vos relances grâce à nos alertes personnalisées.',
+        primary: false
+      },
+      {
+        icon: 'shield-check',
+        title: 'Sécurité renforcée',
+        description: 'Protection des données conforme au RGPD et aux standards de sécurité les plus stricts du secteur médical.',
+        primary: false
+      },
+      {
+        icon: 'headset',
+        title: 'Assistance dédiée',
+        description: 'Bénéficiez d\'un accompagnement personnalisé par nos experts du tiers-payant pour optimiser votre pratique.',
+        primary: false
       }
     ];
   }

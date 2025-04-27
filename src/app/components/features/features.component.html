@@ -1,11 +1,16 @@
 <!-- Section Fonctionnalités -->
 <section class="features-section">
   <div class="container">
-    <h2>Nos Services</h2>
+    <h2 class="section-title">Services</h2>
+    <p class="section-subtitle">Nos solutions pour simplifier la gestion du tiers-payant et optimiser votre activité professionnelle</p>
+    
     <div class="features-grid">
-      <div class="feature-card" *ngFor="let feature of features">
-        <div class="feature-icon">
-          <i class="icon-{{feature.icon}}"></i>
+      <div class="feature-card" *ngFor="let feature of features; let i = index" 
+           data-aos="flip-up" 
+           [attr.data-aos-delay]="i * 100"
+           data-aos-duration="800">
+        <div class="feature-icon" [ngClass]="{'primary': feature.primary}">
+          <i class="bi bi-{{feature.icon}}"></i>
         </div>
         <h3>{{feature.title}}</h3>
         <p>{{feature.description}}</p>

@@ -24,7 +24,7 @@ export class TiersPayantComponent implements OnInit {
   loadBenefits(): void {
     this.tiersBenefits = [
       {
-        icon: 'user',
+        icon: 'person-fill',
         title: 'Pour les patients',
         items: [
           'Pas d\'avance de frais',
@@ -34,7 +34,7 @@ export class TiersPayantComponent implements OnInit {
         ]
       },
       {
-        icon: 'stethoscope',
+        icon: 'heart-pulse-fill',
         title: 'Pour les professionnels',
         items: [
           'Réduction des tâches administratives',
@@ -44,7 +44,7 @@ export class TiersPayantComponent implements OnInit {
         ]
       },
       {
-        icon: 'shield',
+        icon: 'shield-fill-check',
         title: 'Pour les assurances',
         items: [
           'Contrôle accru des demandes',

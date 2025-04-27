@@ -3,9 +3,12 @@
   <div class="container">
     <h2>Ce qu'ils disent de nous</h2>
     <div class="testimonials-carousel">
-      <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+      <div class="testimonial-card" *ngFor="let testimonial of testimonials; let i = index"
+           data-aos="fade-up"
+           [attr.data-aos-delay]="i * 150"
+           data-aos-duration="800"
+           data-aos-anchor-placement="center-bottom">
         <div class="testimonial-avatar">
-          <!-- Utiliser une image générique si l'avatar n'est pas disponible -->
           <div class="avatar-placeholder">{{testimonial.name.charAt(0)}}</div>
         </div>
         <p class="testimonial-comment">"{{testimonial.comment}}"</p>
@@ -13,7 +16,14 @@
           <h4>{{testimonial.name}}</h4>
           <p>{{testimonial.role}}</p>
         </div>
+        <div class="testimonial-rating">
+          <i class="bi bi-star-fill" *ngFor="let star of [1,2,3,4,5]"></i>
+        </div>
       </div>
+    </div>
+    <div class="testimonial-cta" data-aos="fade-in" data-aos-delay="300" data-aos-duration="1000">
+      <p>Rejoignez les professionnels satisfaits qui utilisent notre plateforme</p>
+      <a routerLink="/auth/register" class="btn btn-testimonial">Essayer gratuitement</a>
     </div>
   </div>
 </section>

@@ -42,37 +42,41 @@
       
       <!-- Menu utilisateur pour utilisateurs connectés -->
       <div class="user-menu" *ngIf="isLoggedIn()">
+        <!-- Bouton de tableau de bord avec style accentué - AJOUTÉ -->
+        <a *ngIf="hasRole('ROLE_PROFESSIONAL')" [routerLink]="['/professional/dashboard']" class="dashboard-btn">
+          <i class="bi bi-speedometer2"></i> <span>Dashboard Pro</span>
+        </a>
+        
         <div class="user-dropdown" [class.open]="userDropdownOpen">
-          <a (click)="toggleUserDropdown($event)" class="user-toggle">
-            <span class="avatar">{{ getCurrentUser()?.username?.charAt(0).toUpperCase() }}</span>
-            <span class="username">{{ getCurrentUser()?.username }}</span>
-            <i class="arrow-down"></i>
-          </a>
-          <ul class="dropdown-menu" [class.open]="userDropdownOpen">
-            <li>
-              <a routerLink="/profile" (click)="closeMenu()">
-                <i class="icon-user"></i> Mon profil
-              </a>
-            </li>
-            <!-- Option conditionnelle pour les professionnels de santé -->
-            <li *ngIf="hasRole('ROLE_PROFESSIONAL')">
-              <a routerLink="/professional/dashboard" (click)="closeMenu()">
-                <i class="icon-dashboard"></i> Tableau de bord
-              </a>
-            </li>
-            <!-- Option conditionnelle pour les administrateurs -->
-            <li *ngIf="hasRole('ROLE_ADMIN')">
-              <a routerLink="/admin/dashboard" (click)="closeMenu()">
-                <i class="icon-shield"></i> Administration
-              </a>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a (click)="logout()" class="logout-link">
-                <i class="icon-logout"></i> Déconnexion
-              </a>
-            </li>
-          </ul>
+          <!-- Bouton de profil avec avatar -->
+          <button (click)="toggleUserDropdown($event)" class="user-toggle btn btn-outline">
+            <span class="avatar">{{ getUserInitial() }}</span>
+            <span class="username">{{ getUserName() }}</span>
+            <i class="bi bi-chevron-down ms-1"></i>
+          </button>
+          
+          <!-- Menu déroulant -->
+          <div class="dropdown-menu shadow" [class.show]="userDropdownOpen">
+            <a class="dropdown-item" routerLink="profile" (click)="closeMenu()">
+              <i class="bi bi-person-circle me-2"></i> Mon profil
+            </a>
+            
+            <!-- Option pour les professionnels de santé -->
+            <a class="dropdown-item" *ngIf="hasRole('ROLE_PROFESSIONAL')" routerLink="professional/dashboard" (click)="closeMenu()">
+              <i class="bi bi-speedometer2 me-2"></i> Tableau de bord
+            </a>
+            
+            <!-- Option pour les administrateurs -->
+            <a class="dropdown-item" *ngIf="hasRole('ROLE_ADMIN')" routerLink="admin/dashboard" (click)="closeMenu()">
+              <i class="bi bi-shield-lock me-2"></i> Administration
+            </a>
+            
+            <div class="dropdown-divider"></div>
+            
+            <a class="dropdown-item logout-link" (click)="logout()">
+              <i class="bi bi-box-arrow-right me-2"></i> Déconnexion
+            </a>
+          </div>
         </div>
       </div>
     </div>

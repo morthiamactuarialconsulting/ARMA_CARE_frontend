@@ -1,65 +1,91 @@
- <!-- Footer -->
- <footer class="main-footer">
-    <div class="footer-container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <div class="logo-container">
-            <svg class="logo" width="180" height="45" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg">
-              <!-- ARMA en violet -->
-              <text x="5" y="45" font-family="Arial, sans-serif" font-weight="800" font-size="45" fill="#cb6ce6" letter-spacing="-1">ARMA</text>
-             <!-- CARE en vert -->
-              <text x="150" y="45" font-family="Arial, sans-serif" font-weight="800" font-size="45" fill="#7AE642" letter-spacing="-1">CARE</text>
-            </svg>
-          </div>
-          <p>123 Rue Principal, Dakar Plateau, <br> Dakar, Sénégal</p>
-          <p><strong>Email:</strong> contact&#64;arma-care.com</p>
-          <p><strong>Tel:</strong> +221 77 123 45 67</p>
-
-          <br>
+<!-- Footer -->
+<footer class="main-footer">
+  <div class="footer-wave">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 180">
+      <path fill="#ffffff" fill-opacity="1" d="M0,96L60,106.7C120,117,240,139,360,138.7C480,139,600,117,720,96C840,75,960,53,1080,58.7C1200,64,1320,96,1380,112L1440,128L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path>
+    </svg>
+  </div>
+  <div class="footer-container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo-container">
+          <svg class="logo" width="180" height="45" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg">
+            <!-- ARMA en violet -->
+            <text x="5" y="45" font-family="Arial, sans-serif" font-weight="800" font-size="45" fill="#cb6ce6" letter-spacing="-1">ARMA</text>
+            <!-- CARE en vert -->
+            <text x="150" y="45" font-family="Arial, sans-serif" font-weight="800" font-size="45" fill="#7AE642" letter-spacing="-1">CARE</text>
+          </svg>
         </div>
+        <p class="footer-description">Plateforme de gestion du tiers-payant pour les professionnels de santé</p>
+        <div class="footer-contact">
+          <div class="contact-item">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>123 Rue Principal, Dakar Plateau, Sénégal</span>
+          </div>
+          <div class="contact-item">
+            <i class="bi bi-envelope-fill"></i>
+            <span>contact&#64;arma-care.com</span>
+          </div>
+          <div class="contact-item">
+            <i class="bi bi-telephone-fill"></i>
+            <span>+221 77 123 45 67</span>
+          </div>
+        </div>
+      </div>
         <div class="footer-links">
           <div class="footer-column">
-            <h3>Liens rapides</h3>
+            <h3><i class="bi bi-house"></i> Navigation</h3>
             <ul>
-              <li><a routerLink="/">Accueil</a></li>
-              <li><a routerLink="/services">Services</a></li>
-              <li><a routerLink="/professionnels">Professionnels</a></li>
-              <li><a routerLink="/a-propos">À propos</a></li>
-              <li><a routerLink="/contact">Contact</a></li>
+              <li><a routerLink="/"><i class="bi bi-chevron-right"></i> Accueil</a></li>
+              <li><a routerLink="/services"><i class="bi bi-chevron-right"></i> Services</a></li>
+              <li><a routerLink="/professionnels"><i class="bi bi-chevron-right"></i> Professionnels</a></li>
+              <li><a routerLink="/a-propos"><i class="bi bi-chevron-right"></i> À propos</a></li>
+              <li><a routerLink="/contact"><i class="bi bi-chevron-right"></i> Contact</a></li>
             </ul>
           </div>
           <div class="footer-column">
-            <h3>Services à venir</h3>
+            <h3><i class="bi bi-stars"></i> Bientôt disponible</h3>
             <ul>
-              <li><a routerLink="/services/dossier-medical">Dossier médical</a></li>
-              <li><a routerLink="/services/pharmacie">Pharmacie en ligne</a></li>
+              <li><a routerLink="/services/dossier-medical"><i class="bi bi-chevron-right"></i> Dossier médical</a></li>
+              <li><a routerLink="/services/pharmacie"><i class="bi bi-chevron-right"></i> Pharmacie en ligne</a></li>
+              <li><a routerLink="/faq"><i class="bi bi-chevron-right"></i> Géolocalisation</a></li>
             </ul>
           </div>
           <div class="footer-column">
-            <h3>Informations légales</h3>
+            <h3><i class="bi bi-shield-check"></i> Légal</h3>
             <ul>
-              <li><a routerLink="/mentions-legales">Mentions légales</a></li>
-              <li><a routerLink="/confidentialite">Politique de confidentialité</a></li>
-              <li><a routerLink="/conditions">Conditions d'utilisation</a></li>
+              <li><a routerLink="/mentions-legales"><i class="bi bi-chevron-right"></i> Mentions légales</a></li>
+              <li><a routerLink="/confidentialite"><i class="bi bi-chevron-right"></i> Confidentialité</a></li>
+              <li><a routerLink="/conditions"><i class="bi bi-chevron-right"></i> Conditions</a></li>
             </ul>
+          </div>
+          <div class="footer-column newsletter">
+            <h3><i class="bi bi-envelope"></i> Newsletter</h3>
+            <p>Restez informé des dernières nouveautés</p>
+            <div class="newsletter-form">
+              <input type="email" placeholder="Votre email" class="form-control">
+              <button class="btn-subscribe">S'abonner</button>
+            </div>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 ARMA-CARE. Tous droits réservés.</p>
         <div class="social-links">
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-            <i class="icon-facebook"></i>
+          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="social-icon">
+            <i class="bi bi-facebook"></i>
           </a>
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-            <i class="icon-twitter"></i>
+          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Twitter" class="social-icon">
+            <i class="bi bi-twitter-x"></i>
           </a>
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-            <i class="icon-instagram"></i>
+          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-icon">
+            <i class="bi bi-instagram"></i>
           </a>
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <i class="icon-linkedin"></i>
+          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon">
+            <i class="bi bi-linkedin"></i>
           </a>
+        </div>
+        <div class="copyright">
+          <p>&copy; 2025 <span>ARMA-CARE</span>. Tous droits réservés.</p>
         </div>
       </div>
     </div>
