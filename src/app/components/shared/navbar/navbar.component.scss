@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Variables
 $primary-color: #cb6ce6;
 $text-color: #333;
@@ -372,8 +374,8 @@ $box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         border: 1px solid $primary-color;
         
         &:hover {
-          background-color: darken($primary-color, 10%);
-          border-color: darken($primary-color, 10%);
+          background-color: color.adjust($primary-color, $lightness: -10%);
+          border-color: color.adjust($primary-color, $lightness: -10%);
         }
       }
       

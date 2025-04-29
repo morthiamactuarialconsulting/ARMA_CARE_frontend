@@ -1,9 +1,71 @@
+@use "sass:color";
+
 .dashboard-container {
   padding: 2rem;
+  padding-top: 90px; /* Ajout d'un padding suffisant pour éviter que le contenu soit masqué par la navbar (70px + marge) */
   max-width: 1200px;
   margin: 0 auto;
   background-color: #f9f9f9;
   min-height: calc(100vh - 80px);
+  position: relative; /* Pour assurer un bon positionnement des éléments internes */
+}
+
+/* Styles pour l'en-tête du tableau de bord */
+.dashboard-header {
+  margin-bottom: 2rem;
+  
+  h1 {
+    margin-bottom: 1rem;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    
+    .professional-details {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      
+      .greeting {
+        color: #666;
+      }
+      
+      .professional-name {
+        font-weight: 600;
+        color: #cb6ce6; // Couleur primaire de l'application
+        font-size: 1.1rem;
+      }
+      
+      .professional-speciality {
+        color: #666;
+        font-style: italic;
+      }
+    }
+    
+    .btn-logout {
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: #e9ecef;
+        color: #cb6ce6;
+      }
+    }
+  }
 }
 
 /* Message de bienvenue temporaire */
@@ -101,7 +163,7 @@
   box-shadow: 0 2px 5px rgba(203, 108, 230, 0.3);
   
   &:hover {
-    background-color: darken(#cb6ce6, 10%);
+    background-color: color.adjust(#cb6ce6, $lightness: -10%);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(203, 108, 230, 0.4);
   }
@@ -155,9 +217,13 @@
 }
 
 .dashboard-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
+  margin-top: 2rem;
+  max-width: 800px; // Largeur maximale plus petite pour les cartes
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .card {
@@ -167,10 +233,51 @@
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-top: 3px solid #cb6ce6;
-
+  
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  }
+  
+  &.profile-card {
+    .card-body {
+      padding: 1.5rem;
+      
+      .profile-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        
+        .info-group {
+          h4 {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+          }
+          
+          .info-row {
+            display: flex;
+            margin-bottom: 0.75rem;
+            align-items: baseline;
+            
+            .info-label {
+              width: 40%;
+              font-weight: 500;
+              color: #666;
+              padding-right: 1rem;
+            }
+            
+            .info-value {
+              width: 60%;
+              color: #333;
+              font-weight: 400;
+            }
+          }
+        }
+      }
+    }
   }
 
   .card-header {
@@ -254,38 +361,49 @@
 }
 
 /* Information items */
-.info-card .info-item {
-  margin-bottom: 0.9rem;
-  padding-bottom: 0.9rem;
-  border-bottom: 1px solid #f0f0f0;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
-  &:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-  }
-
-  .info-label {
-    font-weight: 600;
-    color: #444;
-    flex: 0 0 140px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.info-card {
+  grid-column: span 1;
+  
+  // Styles pour les sections d'informations
+  .info-section {
+    margin-bottom: 1.5rem;
     
-    i {
-      color: #7AE642;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .section-title {
       font-size: 1rem;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
     }
   }
-
-  .info-value {
-    flex: 1;
-    color: #666;
-    font-weight: 500;
+  
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    
+    .info-label {
+      font-weight: 500;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      
+      i {
+        color: #cb6ce6;
+      }
+    }
+    
+    .info-value {
+      text-align: right;
+      max-width: 60%;
+      word-wrap: break-word;
+    }
   }
 }
 

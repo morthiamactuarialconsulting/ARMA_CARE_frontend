@@ -5,49 +5,97 @@ Ce document est un guide de référence pour le développement du frontend Angul
 ## Table des matières
 
 1. [Structure du projet](#structure-du-projet)
-2. [Configuration des environnements](#configuration-des-environnements)
-3. [Système d'authentification](#système-dauthentification)
-4. [Téléchargement de documents](#téléchargement-de-documents)
-5. [Page d'accueil et Tiers-payant](#page-daccueil-et-tiers-payant)
-6. [Routes et gardes](#routes-et-gardes)
-7. [Services principaux](#services-principaux)
-8. [Connexion avec le backend](#connexion-avec-le-backend)
-9. [Procédures de développement](#procédures-de-développement)
-10. [Déploiement](#déploiement)
-11. [Journal des modifications](#journal-des-modifications)
+2. [Architecture Standalone](#architecture-standalone)
+3. [Configuration des environnements](#configuration-des-environnements)
+4. [Système d'authentification](#système-dauthentification)
+5. [Compatibilité SSR (Server-Side Rendering)](#compatibilité-ssr)
+6. [Téléchargement de documents](#téléchargement-de-documents)
+7. [Page d'accueil et Tiers-payant](#page-daccueil-et-tiers-payant)
+8. [Routes et gardes](#routes-et-gardes)
+9. [Services principaux](#services-principaux)
+10. [Connexion avec le backend](#connexion-avec-le-backend)
+11. [Procédures de développement](#procédures-de-développement)
+12. [Déploiement](#déploiement)
+13. [Journal des modifications](#journal-des-modifications)
 
 ## Structure du projet
 
-Le projet ARMA-CARE Frontend est structuré selon une architecture modulaire, avec les modules suivants:
+Le projet ARMA-CARE Frontend est structuré selon une architecture standalone, sans modules NgModule traditionnels. Cette organisation favorise la modularité, les performances et la maintenabilité :
 
-- **auth** : Gestion de l'authentification (login, register, reset password)
-- **admin** : Interface d'administration pour la gestion des professionnels
-- **professional** : Interface pour les professionnels de santé
-- **shared** : Composants, services et modèles partagés
+- **auth/** : Composants d'authentification (login, register, reset password)
+- **admin/** : Interface d'administration pour la gestion des professionnels
+- **professional/** : Interface pour les professionnels de santé 
+- **shared/** : Services, guards, modèles partagés et composants communs
+  - **profile/** : Composant de gestion du profil utilisateur (accessible depuis la navbar)
+- **components/** : Composants réutilisables de l'application
 
 ```
 src/
 ├── app/
-│   ├── admin/               # Module administrateur
-│   │   ├── components/      # Composants spécifiques à l'admin
-│   │   └── admin-routing.module.ts
-│   ├── auth/                # Module d'authentification
-│   │   ├── components/      # Composants d'authentification (login, register)
-│   │   └── auth-routing.module.ts
-│   ├── professional/        # Module professionnel
-│   │   ├── components/      # Composants spécifiques au professionnel
-│   │   └── professional-routing.module.ts
-│   ├── shared/              # Module partagé
-│   │   ├── guards/          # Gardes de route (auth, admin, professional)
-│   │   ├── interceptors/    # Intercepteurs HTTP (auth)
-│   │   ├── models/          # Interfaces de données
-│   │   └── services/        # Services partagés
-│   ├── app.component.ts     # Composant racine
-│   ├── app.routes.ts        # Routes principales
+│   ├── admin/               # Fonctionnalités d'administration
+│   │   └── components/      # Composants standalone d'administration
+│   ├── auth/                # Fonctionnalités d'authentification
+│   │   └── components/      # Composants standalone d'authentification
+│   ├── professional/        # Fonctionnalités pour professionnels
+│   │   └── components/      # Composants standalone pour professionnels
+│   ├── shared/              # Éléments partagés
+│   │   ├── guards/          # Gardes de route fonctionnels
+│   │   ├── interceptors/    # Intercepteurs HTTP
+│   │   ├── models/          # Interfaces et types
+│   │   └── services/        # Services injectés
+│   ├── components/          # Composants standalone partagés
+│   ├── app.component.ts     # Composant racine (standalone)
+│   ├── app.routes.ts        # Configuration des routes
 │   └── app.config.ts        # Configuration de l'application
 ├── assets/                  # Ressources statiques
 ├── environments/            # Configuration des environnements
 └── styles.scss              # Styles globaux
+```
+
+## Architecture Standalone
+
+ARMA-CARE a été complètement migré vers l'architecture standalone d'Angular, éliminant la nécessité des modules NgModule traditionnels. Cette approche moderne offre plusieurs avantages :
+
+### Caractéristiques principales
+
+- **Composants autonomes** : Chaque composant déclare ses propres dépendances avec `standalone: true`
+- **Lazy loading optimisé** : Chargement à la demande via `loadComponent` au lieu de `loadChildren`
+- **Injection simplifiée** : Services déclarés avec `providedIn: 'root'`
+- **Performance améliorée** : Tree-shaking plus efficace et bundles plus petits
+- **Maintenance facilitée** : Réduction des dépendances implicites
+
+### Exemple de composant standalone
+
+```typescript
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
+})
+export class LoginComponent implements OnInit {
+  // ...
+}
+```
+
+### Configuration des routes
+
+Les routes utilisent `loadComponent` au lieu de `loadChildren` :
+
+```typescript
+const routes: Routes = [
+  {
+    path: 'professional',
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./professional/components/dashboard/dashboard.component')
+          .then(c => c.ProfessionalDashboardComponent)
+      }
+    ]
+  }
+];
 ```
 
 ## Configuration des environnements
@@ -77,6 +125,80 @@ export const environment = {
 ```
 
 ## Système d'authentification
+
+Le système d'authentification d'ARMA-CARE utilise JWT (JSON Web Tokens) pour gérer les sessions utilisateurs. Il a été optimisé pour être compatible avec le Server-Side Rendering (SSR).
+
+### Fonctionnement
+
+1. **Processus d'authentification** :
+   - L'utilisateur saisit ses identifiants (username/email et mot de passe)
+   - Le frontend envoie une requête POST au backend (`/api/auth/login`)
+   - Le backend authentifie l'utilisateur et renvoie un objet contenant :
+     - `accessToken` : token JWT principal
+     - `refreshToken` : token pour rafraîchir la session
+     - `username` : identifiant de l'utilisateur
+     - `roles` : tableau des rôles attribués à l'utilisateur
+     - `id` : identifiant numérique de l'utilisateur (facultatif)
+     - `email` : adresse email de l'utilisateur (facultatif)
+
+2. **Gestion des rôles** :
+   - Les rôles sont stockés dans le token JWT et dans le sessionStorage
+   - Les principaux rôles sont `ROLE_PROFESSIONAL` et `ROLE_ADMIN`
+   - La méthode `hasRole()` vérifie si l'utilisateur possède un rôle spécifique
+
+3. **Redirection basée sur les rôles** :
+   - Après connexion, les utilisateurs sont redirigés vers différentes interfaces selon leur rôle
+   - Priorité donnée au tableau de bord professionnel pour les utilisateurs avec `ROLE_PROFESSIONAL`
+
+### Sécurité
+
+Le système d'authentification intègre plusieurs mesures de sécurité :
+
+- **Vérification stricte des rôles** avant accès aux zones protégées
+- **Validation des tokens** pour détecter les sessions expirées ou corrompues
+- **Protection CSRF** configurée dans app.config.ts
+- **Journalisation de sécurité** des tentatives d'accès non autorisées
+
+## Compatibilité SSR
+
+L'application a été optimisée pour le Server-Side Rendering (SSR), ce qui améliore les performances et le référencement.
+
+### Adaptations pour SSR
+
+1. **Vérification de l'environnement d'exécution** :
+   - Injection de `PLATFORM_ID` et utilisation de `isPlatformBrowser()` pour détecter l'environnement
+   - Vérification systématique avant d'accéder à `window` ou `document`
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private isBrowser: boolean;
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
+
+  isLoggedIn(): boolean {
+    if (!this.isBrowser) return false; // Côté serveur, retourner false
+    
+    // Vérification côté client
+    const token = window.sessionStorage.getItem(this.TOKEN_KEY);
+    return !!token;
+  }
+}
+```
+
+2. **Gestion des redirections** :
+   - Utilisation de `router.navigate()` côté serveur
+   - Possibilité d'utiliser `window.location.href` côté client pour les redirections complètes
+
+3. **Configuration SSR** :
+   - Activation de l'hydratation côté client dans `app.config.ts`
+   - Gestion des états transitoires pour éviter les différences de rendu
 
 Le système d'authentification est basé sur JWT (JSON Web Tokens) et comprend les fonctionnalités suivantes:
 
@@ -395,7 +517,72 @@ server {
 
 *Ce document sera régulièrement mis à jour pour refléter les évolutions du projet ARMA-CARE Frontend.*
 
+## Composants UI Principaux
+
+### Tableau de bord professionnel
+
+Le tableau de bord professionnel a été simplifié pour se concentrer sur deux éléments essentiels :
+
+1. **Carte de statut du compte** :
+   - Affiche l'état actuel du compte (En attente, Vérifié, Rejeté, Suspendu)
+   - Présente un message contextuel adapté au statut
+   - Utilise un code couleur intuitif pour chaque état
+
+2. **Carte d'actions rapides** :
+   - Fournit des accès directs aux fonctionnalités fréquemment utilisées
+   - Permet une navigation rapide et efficace dans l'application
+
+Cette simplification améliore l'expérience utilisateur en fournissant uniquement les informations essentielles et les actions fréquentes.
+
+### Composant de profil
+
+Un nouveau composant de profil a été créé pour centraliser la gestion des informations personnelles et professionnelles des utilisateurs :
+
+1. **Informations personnelles** :
+   - Nom complet du professionnel
+   - Spécialité médicale
+   - Numéro RPPS
+
+2. **Coordonnées** :
+   - Email professionnel (utilise le username)
+   - Numéro de téléphone
+   - Adresse complète (rue, ville, pays)
+
+Ce composant est accessible via l'option "Mon profil" dans la barre de navigation, permettant aux utilisateurs d'accéder facilement à leurs informations personnelles depuis n'importe quelle page de l'application.
+
+### Barre de navigation
+
+La barre de navigation a été améliorée pour :
+
+1. **Afficher les informations nominatives** :
+   - Priorité donnée au prénom et nom de l'utilisateur
+   - Affichage de l'initiale dans l'avatar
+
+2. **Menu déroulant de profil** :
+   - Accès direct au profil utilisateur
+   - Navigation vers le tableau de bord approprié selon le rôle
+   - Option de déconnexion sécurisée
+
+La conception responsive garantit une expérience cohérente sur tous les appareils.
+
 ## Journal des modifications
+
+### 29 avril 2025
+
+- **Réorganisation UI majeure**:
+  - Création d'un nouveau composant `ProfileComponent` accessible depuis la navbar
+  - Simplification du tableau de bord professionnel pour se concentrer sur le statut et les actions rapides
+  - Déplacement des informations détaillées du professionnel vers la page de profil dédiée
+  - Amélioration visuelle de la barre de navigation
+
+- **Optimisations de l'authentification**:
+  - Mise à jour de l'interface `AuthResponse` pour inclure de nouveaux champs venant du backend
+  - Amélioration de la sauvegarde des données utilisateur pour inclure tous les champs disponibles
+  - Correction de l'affichage des informations nominatives (prénom, nom, email)
+
+- **Améliorations d'accessibilité**:
+  - Ajout d'un padding-top pour éviter que le contenu soit masqué par la navbar fixe
+  - Optimisation de la mise en page pour une meilleure expérience sur tous les appareils
 
 ### 26 avril 2025
 - **Amélioration de la section Hero** :

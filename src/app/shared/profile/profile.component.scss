@@ -1,0 +1,214 @@
+@use "sass:color";
+
+// Variables
+$primary-color: #cb6ce6;
+$text-color: #333;
+$light-gray: #f5f5f5;
+$medium-gray: #e0e0e0;
+$dark-gray: #555;
+$white: #fff;
+$transition-speed: 0.3s;
+$box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+.profile-container {
+  padding: 2rem;
+  padding-top: 90px; // Pour éviter que le contenu soit masqué par la navbar fixe
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  min-height: calc(100vh - 80px);
+  position: relative;
+}
+
+.profile-header {
+  margin-bottom: 2rem;
+  text-align: center;
+  
+  h1 {
+    font-size: 2rem;
+    color: $text-color;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .subtitle {
+    color: $dark-gray;
+    font-size: 1.1rem;
+  }
+}
+
+/* Loading et error */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  
+  .spinner {
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    color: $dark-gray;
+  }
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  i {
+    font-size: 1.2rem;
+  }
+}
+
+/* Contenu du profil */
+.profile-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Carte */
+.card {
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-top: 3px solid $primary-color;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  }
+  
+  .card-header {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background-color: #fdfdfd;
+    border-bottom: 1px solid $medium-gray;
+    
+    i {
+      color: $primary-color;
+      font-size: 1.5rem;
+      margin-right: 0.75rem;
+    }
+    
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $text-color;
+    }
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+/* Carte d'informations */
+.info-card {
+  // Styles pour les sections d'informations
+  .info-section {
+    margin-bottom: 1.5rem;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+  }
+  
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    
+    .info-label {
+      font-weight: 500;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      
+      i {
+        color: $primary-color;
+      }
+    }
+    
+    .info-value {
+      text-align: right;
+      max-width: 60%;
+      word-wrap: break-word;
+    }
+  }
+}
+
+/* Carte d'édition */
+.edit-card {
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    
+    p {
+      margin-bottom: 1.5rem;
+      color: $dark-gray;
+    }
+    
+    .btn-primary {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      padding: 0.5rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background-color: darken($primary-color, 10%);
+        border-color: darken($primary-color, 10%);
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 1rem;
+    padding-top: 80px;
+  }
+  
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    
+    .info-label {
+      margin-bottom: 0.3rem;
+    }
+    
+    .info-value {
+      text-align: left;
+      max-width: 100%;
+    }
+  }
+}

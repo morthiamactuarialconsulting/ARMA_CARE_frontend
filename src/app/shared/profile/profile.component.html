@@ -1,0 +1,95 @@
+<div class="profile-container">
+  <div class="loading-container" *ngIf="loading">
+    <div class="spinner">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+    </div>
+    <p>Chargement de vos informations...</p>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <span>{{ error }}</span>
+  </div>
+
+  <div class="profile-content" *ngIf="!loading && !error && professional">
+    <div class="profile-header">
+      <h1>Mon Profil Professionnel</h1>
+      <p class="subtitle">Gérez vos informations personnelles et professionnelles</p>
+    </div>
+
+    <!-- Carte d'informations professionnelles -->
+    <div class="card info-card">
+      <div class="card-header">
+        <i class="bi bi-person-vcard"></i>
+        <h3>Informations professionnelles</h3>
+      </div>
+      <div class="card-body">
+        <!-- Informations personnelles -->
+        <div class="info-section">
+          <h4 class="section-title">Informations personnelles</h4>
+          
+          <div class="info-item">
+            <span class="info-label"><i class="bi bi-person-fill"></i> Nom complet:</span>
+            <span class="info-value">Dr. {{ professional.firstName }} {{ professional.lastName }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-label"><i class="bi bi-briefcase-fill"></i> Spécialité:</span>
+            <span class="info-value">{{ professional.speciality || 'Non renseigné' }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-label"><i class="bi bi-card-heading"></i> Numéro RPPS:</span>
+            <span class="info-value">{{ professional.registrationNumber || 'Non renseigné' }}</span>
+          </div>
+        </div>
+        
+        <!-- Coordonnées -->
+        <div class="info-section">
+          <h4 class="section-title">Coordonnées</h4>
+          
+          <div class="info-item">
+            <span class="info-label"><i class="bi bi-envelope-fill"></i> Email:</span>
+            <span class="info-value">{{ professional.email || 'Non renseigné' }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-label"><i class="bi bi-telephone-fill"></i> Téléphone:</span>
+            <span class="info-value">{{ professional.phone || 'Non renseigné' }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-label"><i class="bi bi-geo-alt-fill"></i> Adresse:</span>
+            <span class="info-value">{{ professional.address || 'Non renseigné' }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-label"><i class="bi bi-building"></i> Ville:</span>
+            <span class="info-value">{{ professional.city || 'Non renseigné' }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-label"><i class="bi bi-globe"></i> Pays:</span>
+            <span class="info-value">{{ professional.country || 'France' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte d'édition du profil -->
+    <div class="card edit-card">
+      <div class="card-header">
+        <i class="bi bi-pencil-square"></i>
+        <h3>Modifier mon profil</h3>
+      </div>
+      <div class="card-body">
+        <p>Vous pouvez mettre à jour vos informations personnelles et professionnelles.</p>
+        <button class="btn btn-primary">
+          <i class="bi bi-pencil-fill me-2"></i> Modifier mes informations
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

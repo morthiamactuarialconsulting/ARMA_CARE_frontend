@@ -42,10 +42,6 @@
       
       <!-- Menu utilisateur pour utilisateurs connectés -->
       <div class="user-menu" *ngIf="isLoggedIn()">
-        <!-- Bouton de tableau de bord avec style accentué - AJOUTÉ -->
-        <a *ngIf="hasRole('ROLE_PROFESSIONAL')" [routerLink]="['/professional/dashboard']" class="dashboard-btn">
-          <i class="bi bi-speedometer2"></i> <span>Dashboard Pro</span>
-        </a>
         
         <div class="user-dropdown" [class.open]="userDropdownOpen">
           <!-- Bouton de profil avec avatar -->
@@ -57,6 +53,8 @@
           
           <!-- Menu déroulant -->
           <div class="dropdown-menu shadow" [class.show]="userDropdownOpen">
+
+            
             <a class="dropdown-item" routerLink="profile" (click)="closeMenu()">
               <i class="bi bi-person-circle me-2"></i> Mon profil
             </a>

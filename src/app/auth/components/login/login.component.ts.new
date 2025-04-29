@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
     console.log('[LOGIN] Rôles disponibles:', currentUser.roles);
     
     // Vérification des rôles et redirection appropriée
-    if (this.authService.hasRole('ROLE_PROFESSIONAL')) {
+    if (this.authService.hasRole('PROFESSIONAL')) {
       this.router.navigateByUrl('/professional/dashboard', { replaceUrl: true })
         .then(success => {
           console.log('[LOGIN] Navigation réussie vers dashboard professionnel:', success);
@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
             window.location.href = '/professional/dashboard';
           }
         });
-    } else if (this.authService.hasRole('ROLE_ADMIN')) {
+    } else if (this.authService.hasRole('ADMIN')) {
       this.router.navigateByUrl('/admin/dashboard', { replaceUrl: true })
         .then(success => {
           console.log('[LOGIN] Navigation réussie vers dashboard admin:', success);

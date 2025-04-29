@@ -1,6 +1,6 @@
-import { Component, HostListener, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, HostListener, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../shared/services/auth.service';
 import { filter } from 'rxjs/operators';
 
@@ -16,22 +16,25 @@ export class NavbarComponent implements OnInit {
   menuOpen = false;
   dropdownOpen = false;
   userDropdownOpen = false;
-
+  private isBrowser: boolean;
   currentUser: any = null;
-  
+
   constructor(
     private authService: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    // Vérifier l'état du scroll au chargement uniquement côté navigateur
+    if (this.isBrowser) {
+      this.checkScroll();
+    }
+  }
 
   ngOnInit(): void {
-    // Vérifier la position du scroll au chargement
-    this.checkScroll();
-    
     // Récupérer les informations utilisateur au démarrage
     this.updateUserInfo();
-    
     // Mettre à jour les informations utilisateur à chaque changement de route
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -45,7 +48,9 @@ export class NavbarComponent implements OnInit {
    */
   @HostListener('window:scroll')
   checkScroll(): void {
-    this.scrolled = window.scrollY > 50;
+    if (this.isBrowser) {
+      this.scrolled = window.scrollY > 50;
+    }
   }
 
   /**
@@ -59,7 +64,9 @@ export class NavbarComponent implements OnInit {
       this.userDropdownOpen = false;
     }
     // Empêche le défilement du corps quand le menu est ouvert
-    document.body.style.overflow = this.menuOpen ? 'hidden' : '';
+    if (this.isBrowser) {
+      document.body.style.overflow = this.menuOpen ? 'hidden' : '';
+    }
   }
 
   /**
@@ -70,7 +77,9 @@ export class NavbarComponent implements OnInit {
       this.menuOpen = false;
       this.dropdownOpen = false;
       this.userDropdownOpen = false;
-      document.body.style.overflow = '';
+      if (this.isBrowser) {
+        document.body.style.overflow = '';
+      }
     }
   }
 
@@ -114,9 +123,10 @@ export class NavbarComponent implements OnInit {
    * Vérifie si l'utilisateur est connecté
    */
   isLoggedIn(): boolean {
+    if (!this.isBrowser) return false; // Côté serveur, considérer comme non connecté
     return this.authService.isLoggedIn();
   }
-  
+
   /**
    * Mise à jour des informations utilisateur
    */
@@ -180,31 +190,54 @@ export class NavbarComponent implements OnInit {
   }
   
   /**
-   * Récupère le nom pour l'affichage
+   * Récupère le nom pour l'affichage dans la navbar
+   * Priorité absolue au prénom et nom reçus du backend
    */
   getUserName(): string {
     const user = this.getCurrentUser();
     
-    if (user) {
-      // Priorité au nom complet s'il existe
-      if (user.fullName) {
-        return user.fullName;
-      }
-      // Sinon, combiner prénom et nom
-      else if (user.firstName || user.lastName) {
-        return `${user.firstName || ''} ${user.lastName || ''}`.trim();
-      }
-      // Fallback vers l'email ou le nom d'utilisateur
-      else if (user.email) {
-        // Afficher la partie avant @ de l'email
-        return user.email.split('@')[0];
-      }
-      else if (user.username) {
-        return user.username;
-      }
+    if (!user) {
+      return 'Utilisateur'; // Fallback si aucun utilisateur trouvé
     }
     
-    return 'Utilisateur'; // Fallback
+    // Vérifier si le prénom existe seul (priorité 1)
+    if (user.firstName && !user.lastName) {
+      console.log('[NAVBAR] Affichage du prénom uniquement:', user.firstName);
+      return user.firstName;
+    }
+    
+    // Prénom et nom de famille ensemble (priorité 2)
+    if (user.firstName && user.lastName) {
+      console.log('[NAVBAR] Affichage prénom et nom:', `${user.firstName} ${user.lastName}`);
+      return `${user.firstName} ${user.lastName}`;
+    }
+    
+    // Seulement le nom de famille si disponible (priorité 3)
+    if (user.lastName) {
+      console.log('[NAVBAR] Affichage du nom de famille uniquement:', user.lastName);
+      return user.lastName;
+    }
+    
+    // Nom complet si disponible (priorité 4)
+    if (user.fullName) {
+      console.log('[NAVBAR] Affichage du nom complet:', user.fullName);
+      return user.fullName;
+    }
+    
+    // Fallbacks
+    if (user.email) {
+      const emailName = user.email.split('@')[0];
+      console.log('[NAVBAR] Fallback vers email:', emailName);
+      return emailName;
+    }
+    
+    if (user.username) {
+      console.log('[NAVBAR] Fallback vers username:', user.username);
+      return user.username;
+    }
+    
+    console.log('[NAVBAR] Aucune information nominative trouvée, utilisation du fallback');
+    return 'Utilisateur'; // Fallback final
   }
 
   /**

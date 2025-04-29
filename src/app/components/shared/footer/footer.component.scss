@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Variables (cohérentes avec l'identité visuelle)
 $primary-color: #cb6ce6;
 $secondary-color: #7AE642;
@@ -230,7 +232,7 @@ $footer-muted: rgba(255, 255, 255, 0.7);
           transition: background-color 0.3s ease;
           
           &:hover {
-            background-color: darken($primary-color, 10%);
+            background-color: color.adjust($primary-color, $lightness: -10%);
           }
         }
       }

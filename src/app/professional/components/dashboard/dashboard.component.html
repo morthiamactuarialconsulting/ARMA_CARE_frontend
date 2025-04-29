@@ -10,7 +10,11 @@
   <div class="dashboard-header">
     <h1>Tableau de bord professionnel</h1>
     <div class="user-info">
-      <span *ngIf="professional">Bienvenue, Dr. {{ professional.firstName }} {{ professional.lastName }}</span>
+      <div class="professional-details" *ngIf="professional">
+        <span class="greeting">Bienvenue, </span>
+        <span class="professional-name">{{ professional.firstName }} {{ professional.lastName }}</span>
+        <span class="professional-speciality" *ngIf="professional.speciality">| {{ professional.speciality }}</span>
+      </div>
       <button class="btn btn-logout" (click)="logout()">
         <i class="bi bi-box-arrow-right"></i> Déconnexion
       </button>
@@ -32,78 +36,52 @@
   </div>
 
   <div class="dashboard-content" *ngIf="!loading && !error && professional">
-    <div class="card status-card">
-      <div class="card-header">
-        <i class="bi bi-shield-check"></i>
-        <h3>Statut du compte</h3>
-      </div>
-      <div class="card-body">
-        <div class="status-indicator" [ngClass]="{
-          'status-pending': professional.accountStatus === 'PENDING_VERIFICATION',
-          'status-verified': professional.accountStatus === 'VERIFIED',
-          'status-rejected': professional.accountStatus === 'REJECTED',
-          'status-suspended': professional.accountStatus === 'SUSPENDED'
-        }">
-          <i class="bi" [ngClass]="{
-            'bi-hourglass-split': professional.accountStatus === 'PENDING_VERIFICATION',
-            'bi-check-circle-fill': professional.accountStatus === 'VERIFIED',
-            'bi-x-circle-fill': professional.accountStatus === 'REJECTED',
-            'bi-pause-circle-fill': professional.accountStatus === 'SUSPENDED',
-            'bi-question-circle-fill': !professional.accountStatus
-          }"></i>
-          <span>
-            {{ professional.accountStatus === 'PENDING_VERIFICATION' ? 'En attente de vérification' :
-               professional.accountStatus === 'VERIFIED' ? 'Vérifié' :
-               professional.accountStatus === 'REJECTED' ? 'Rejeté' :
-               professional.accountStatus === 'SUSPENDED' ? 'Suspendu' : 'Inconnu' }}
-          </span>
+      
+      <!-- Carte de statut du compte -->
+      <div class="card status-card">
+        <div class="card-header">
+          <i class="bi bi-shield-check"></i>
+          <h3>Statut du compte</h3>
         </div>
-        <p *ngIf="professional.accountStatus === 'PENDING_VERIFICATION'">
-          Votre compte est en cours de vérification par notre équipe administrative. Veuillez patienter.
-        </p>
-        <p *ngIf="professional.accountStatus === 'REJECTED'">
-          Votre inscription a été rejetée. Veuillez contacter l'assistance pour plus d'informations.
-        </p>
-        <p *ngIf="professional.accountStatus === 'SUSPENDED'">
-          Votre compte est actuellement suspendu. Veuillez contacter l'assistance pour plus d'informations.
-        </p>
-      </div>
-    </div>
-
-    <div class="card info-card">
-      <div class="card-header">
-        <i class="bi bi-person-vcard"></i>
-        <h3>Informations professionnelles</h3>
-      </div>
-      <div class="card-body">
-        <div class="info-item">
-          <span class="info-label"><i class="bi bi-briefcase-fill"></i> Spécialité:</span>
-          <span class="info-value">{{ professional.speciality }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label"><i class="bi bi-envelope-fill"></i> Email:</span>
-          <span class="info-value">{{ professional.email || 'Non renseigné' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label"><i class="bi bi-telephone-fill"></i> Téléphone:</span>
-          <span class="info-value">{{ professional.phone || 'Non renseigné' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label"><i class="bi bi-geo-alt-fill"></i> Adresse:</span>
-          <span class="info-value">{{ professional.address || 'Non renseignée' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label"><i class="bi bi-building-fill"></i> Ville:</span>
-          <span class="info-value">{{ professional.city || 'Non renseignée' }}</span>
+        <div class="card-body">
+          <div class="status-indicator" [ngClass]="{
+            'status-pending': professional.accountStatus === 'PENDING_VERIFICATION',
+            'status-verified': professional.accountStatus === 'VERIFIED',
+            'status-rejected': professional.accountStatus === 'REJECTED',
+            'status-suspended': professional.accountStatus === 'SUSPENDED'
+          }">
+            <i class="bi" [ngClass]="{
+              'bi-hourglass-split': professional.accountStatus === 'PENDING_VERIFICATION',
+              'bi-check-circle-fill': professional.accountStatus === 'VERIFIED',
+              'bi-x-circle-fill': professional.accountStatus === 'REJECTED',
+              'bi-pause-circle-fill': professional.accountStatus === 'SUSPENDED',
+              'bi-question-circle-fill': !professional.accountStatus
+            }"></i>
+            <span>
+              {{ professional.accountStatus === 'PENDING_VERIFICATION' ? 'En attente de vérification' :
+                 professional.accountStatus === 'VERIFIED' ? 'Vérifié' :
+                 professional.accountStatus === 'REJECTED' ? 'Rejeté' :
+                 professional.accountStatus === 'SUSPENDED' ? 'Suspendu' :
+                 'Statut inconnu' }}
+            </span>
+          </div>
+          <p *ngIf="professional.accountStatus === 'PENDING_VERIFICATION'">
+            Votre compte est en cours de vérification par notre équipe administrative. Veuillez patienter.
+          </p>
+          <p *ngIf="professional.accountStatus === 'REJECTED'">
+            Votre inscription a été rejetée. Veuillez contacter l'assistance pour plus d'informations.
+          </p>
+          <p *ngIf="professional.accountStatus === 'SUSPENDED'">
+            Votre compte est actuellement suspendu. Veuillez contacter l'assistance pour plus d'informations.
+          </p>
         </div>
       </div>
-    </div>
-
-    <!-- Section des actions rapides -->
-    <div class="card actions-card">
-      <div class="card-header">
-        <i class="bi bi-lightning-charge-fill"></i>
-        <h3>Actions rapides</h3>
+      
+      <!-- Section des actions rapides -->
+      <div class="card actions-card">
+        <div class="card-header">
+          <i class="bi bi-lightning-charge-fill"></i>
+          <h3>Actions rapides</h3>
       </div>
       <div class="card-body">
         <div class="quick-actions">
@@ -125,6 +103,5 @@
           </button>
         </div>
       </div>
-    </div>
   </div>
 </div>

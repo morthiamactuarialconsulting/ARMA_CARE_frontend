@@ -39,7 +39,19 @@ L'interface d'ARMA-CARE est organisée en plusieurs sections principales:
 - **Consultations** : Suivi des consultations et soins
 - **Documents** : Gestion des documents médicaux
 - **Tiers-payant** : Suivi des remboursements
-- **Paramètres** : Configuration du compte
+- **Profil** : Accès à vos informations personnelles et professionnelles
+- **Tableau de bord** : Statut du compte et actions rapides
+
+### Barre de navigation
+
+La barre de navigation en haut de l'écran vous permet d'accéder rapidement aux fonctionnalités principales :
+
+- Votre nom et prénom sont affichés dans un menu déroulant en haut à droite
+- Cliquez sur votre nom pour accéder aux options suivantes :
+  - **Mon profil** : Consultez et gérez vos informations personnelles
+  - **Tableau de bord** : Accédez à votre tableau de bord professionnel
+  - **Administration** : (visible uniquement pour les administrateurs)
+  - **Déconnexion** : Quittez votre session en toute sécurité
 
 ## Compte et authentification
 
@@ -66,7 +78,64 @@ L'interface d'ARMA-CARE est organisée en plusieurs sections principales:
 2. Saisissez votre adresse email
 3. Suivez les instructions reçues par email pour réinitialiser votre mot de passe
 
+## Gestion de votre profil
+
+### Accès à votre profil
+
+Pour accéder à votre profil utilisateur :
+
+1. Cliquez sur votre nom affiché dans la barre de navigation (en haut à droite)
+2. Sélectionnez "Mon profil" dans le menu déroulant
+
+### Informations disponibles
+
+La page de profil affiche les informations suivantes :
+
+#### Informations personnelles
+- Nom complet
+- Spécialité médicale
+- Numéro RPPS
+
+#### Coordonnées
+- Adresse email
+- Numéro de téléphone
+- Adresse postale complète (rue, ville, pays)
+
+### Modification de votre profil
+
+Pour modifier vos informations personnelles et professionnelles :
+
+1. Accédez à votre page de profil
+2. Cliquez sur le bouton "Modifier mes informations"
+3. Mettez à jour les champs nécessaires
+4. Confirmez vos modifications
+
 ## Fonctionnalités pour professionnels de santé
+
+### Tableau de bord professionnel
+
+Le tableau de bord est votre centre de contrôle pour accéder rapidement aux informations essentielles et aux actions fréquentes.
+
+#### Accès au tableau de bord
+
+1. Après connexion, vous êtes automatiquement redirigé vers votre tableau de bord
+2. Alternativement, cliquez sur votre nom dans la barre de navigation et sélectionnez "Tableau de bord"
+
+#### Statut du compte
+
+Le tableau de bord affiche votre statut de vérification actuel :
+- **En attente de vérification** : Votre inscription est en cours d'examen par notre équipe administrative
+- **Vérifié** : Votre compte est activé et vous avez accès à toutes les fonctionnalités
+- **Rejeté** : Votre inscription n'a pas été approuvée (un message explicatif vous indique la raison)
+- **Suspendu** : Votre compte a été temporairement suspendu
+
+#### Actions rapides
+
+Le tableau de bord propose également un accès direct aux fonctionnalités fréquemment utilisées :
+- Créer un nouveau patient
+- Consulter vos rendez-vous
+- Gérer vos documents
+- Accéder au système de facturation
 
 ### Gestion des patients
 
