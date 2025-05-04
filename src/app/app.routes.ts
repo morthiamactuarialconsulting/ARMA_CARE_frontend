@@ -15,6 +15,10 @@ export const routes: Routes = [
         loadComponent: () => import('./auth/components/register/register.component').then(c => c.RegisterComponent)
       },
       {
+        path: 'first-admin',
+        loadComponent: () => import('./admin/components/first-admin-registration/first-admin-registration.component').then(c => c.FirstAdminRegistrationComponent)
+      },
+      {
         path: '',
         redirectTo: 'login',
         pathMatch: 'full'

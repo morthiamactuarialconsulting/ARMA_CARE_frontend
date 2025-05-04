@@ -1,0 +1,128 @@
+<!-- Modal détails professionnel ARMA-CARE -->
+<div class="modal fade" [ngClass]="{'show': show}" [style.display]="show ? 'block' : 'none'" id="professionalDetailsModal" tabindex="-1" aria-labelledby="professionalDetailsModalLabel" aria-hidden="true" (keydown.escape)="onClose()">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="professionalDetailsModalLabel">
+          <i class="bi bi-person-badge me-2"></i>
+          Détails du professionnel
+        </h5>
+        <button type="button" class="btn-close" (click)="onClose()" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body" *ngIf="professional">
+        <div class="row g-3">
+          <div class="col-md-3 text-center">
+            <div class="avatar-lg mb-2">
+              <i class="bi bi-person-circle" style="font-size:3.5rem;color:#cb6ce6;"></i>
+            </div>
+            <h4>{{ professional.firstName }} {{ professional.lastName }}</h4>
+            <div class="badge bg-secondary mb-2">{{ professional.speciality }}</div>
+            <div class="status-badge mt-2" [ngClass]="getStatusClass(professional.accountStatus)">
+              <i class="bi" [ngClass]="getStatusIcon(professional.accountStatus)"></i>
+              {{ getStatusLabel(professional.accountStatus) }}
+            </div>
+          </div>
+          <div class="col-md-9">
+            <table class="table table-borderless table-sm mb-0">
+              <tbody>
+                <tr>
+                  <th>Email :</th>
+                  <td>{{ professional.email }}</td>
+                </tr>
+                <tr>
+                  <th>Téléphone :</th>
+                  <td>{{ professional.phone }}</td>
+                </tr>
+                <tr>
+                  <th>Numéro d'enregistrement :</th>
+                  <td>{{ professional.registrationNumber }}</td>
+                </tr>
+                <tr *ngIf="professional.address">
+                  <th>Adresse :</th>
+                  <td>{{ professional.address }}</td>
+                </tr>
+                <tr *ngIf="professional.city">
+                  <th>Ville :</th>
+                  <td>{{ professional.city }}</td>
+                </tr>
+                <tr *ngIf="professional.country">
+                  <th>Pays :</th>
+                  <td>{{ professional.country }}</td>
+                </tr>
+                <tr *ngIf="professional.identityDocumentPath">
+                  <th>Pièce d'identité :</th>
+                  <td>
+                    <button class="btn btn-link p-0" (click)="onViewDocument(professional.identityDocumentPath)">
+                      <i class="bi bi-eye"></i> Voir la pièce
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="professional.bankAccountNumberPath">
+                  <th>RIB / Relevé bancaire :</th>
+                  <td>
+                    <button class="btn btn-link p-0" (click)="onViewDocument(professional.bankAccountNumberPath)">
+                      <i class="bi bi-eye"></i> Voir le RIB
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="professional.professionalInsurancePath">
+                  <th>Assurance professionnelle :</th>
+                  <td>
+                    <button class="btn btn-link p-0" (click)="onViewDocument(professional.professionalInsurancePath)">
+                      <i class="bi bi-eye"></i> Voir le document
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="professional.diplomaPath">
+                  <th>Diplôme :</th>
+                  <td>
+                    <button class="btn btn-link p-0" (click)="onViewDocument(professional.diplomaPath)">
+                      <i class="bi bi-eye"></i> Voir le diplôme
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="professional.licensePath">
+                  <th>Licence :</th>
+                  <td>
+                    <button class="btn btn-link p-0" (click)="onViewDocument(professional.licensePath)">
+                      <i class="bi bi-eye"></i> Voir la licence
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="professional.statusChangeDate">
+                  <th>Dernier changement :</th>
+                  <td>{{ professional.statusChangeDate | date:'dd/MM/yyyy HH:mm' }}</td>
+                </tr>
+                <tr *ngIf="professional.statusChangeReason">
+                  <th>Raison du statut :</th>
+                  <td>{{ professional.statusChangeReason }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" *ngIf="professional">
+        <button class="btn btn-danger me-auto" (click)="onDelete()">
+          <i class="bi bi-trash"></i> Supprimer définitivement
+        </button>
+        <button class="btn btn-secondary" (click)="onClose()">Fermer</button>
+        <button class="btn btn-warning" *ngIf="professional.accountStatus === AccountStatus.PENDING_VERIFICATION" (click)="onReject()">
+          <i class="bi bi-x-lg"></i> Rejeter
+        </button>
+        <button class="btn btn-success" *ngIf="professional.accountStatus === AccountStatus.PENDING_VERIFICATION" (click)="onApprove()">
+          <i class="bi bi-check-lg"></i> Approuver
+        </button>
+        <button class="btn btn-info" *ngIf="professional.accountStatus === AccountStatus.ACTIVE" (click)="onSuspend()">
+          <i class="bi bi-pause-fill"></i> Suspendre
+        </button>
+        <button class="btn btn-primary" *ngIf="professional.accountStatus === AccountStatus.SUSPENDED" (click)="onApprove()">
+          <i class="bi bi-play-fill"></i> Réactiver
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop pour la modale -->
+<div class="modal-backdrop fade" [ngClass]="{'show': show}" [style.display]="show ? 'block' : 'none'"></div>

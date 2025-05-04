@@ -49,6 +49,14 @@ export interface PasswordChangeRequest {
   confirmPassword: string;
 }
 
+export interface AdminRegisterRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  confirmPassword: string;
+}
+
 export interface PasswordResetRequest {
   email: string;
 }

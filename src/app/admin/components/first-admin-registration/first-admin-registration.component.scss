@@ -1,0 +1,133 @@
+.first-admin-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 6rem 2rem 2rem;
+  background: linear-gradient(135deg, rgba(203, 108, 230, 0.08) 0%, rgba(122, 230, 66, 0.08) 100%);
+}
+
+.card {
+  width: 100%;
+  max-width: 650px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(203, 108, 230, 0.1);
+  
+  .card-header {
+    background-color: #fff;
+    padding: 1.5rem 2rem;
+    border-bottom: 3px solid #cb6ce6;
+    text-align: center;
+    
+    h2 {
+      color: #cb6ce6;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .lead {
+      color: #555;
+      font-size: 1.1rem;
+    }
+  }
+  
+  .card-body {
+    padding: 2rem;
+  }
+}
+
+.security-notice {
+  background-color: rgba(122, 230, 66, 0.1);
+  border-left: 4px solid #7AE642;
+  
+  .alert-heading {
+    color: #2a5815;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  ul {
+    padding-left: 1.5rem;
+    
+    li {
+      margin-bottom: 0.5rem;
+      color: #444;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.btn-primary {
+  background-color: #cb6ce6;
+  border-color: #cb6ce6;
+  transition: all 0.3s ease;
+  
+  &:hover, &:focus {
+    background-color: darken(#cb6ce6, 10%);
+    border-color: darken(#cb6ce6, 10%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(203, 108, 230, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    background-color: #cb6ce6;
+    border-color: #cb6ce6;
+    opacity: 0.7;
+  }
+}
+
+.form-control {
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ddd;
+  transition: all 0.3s;
+  
+  &:focus {
+    border-color: #cb6ce6;
+    box-shadow: 0 0 0 0.25rem rgba(203, 108, 230, 0.25);
+  }
+  
+  &.is-invalid {
+    border-color: #dc3545;
+    
+    &:focus {
+      box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+    }
+  }
+}
+
+.invalid-feedback {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #333;
+  
+  span.text-danger {
+    font-weight: bold;
+  }
+}
+
+@media (max-width: 768px) {
+  .first-admin-container {
+    padding: 1rem;
+  }
+  
+  .card-header, .card-body {
+    padding: 1.25rem;
+  }
+}

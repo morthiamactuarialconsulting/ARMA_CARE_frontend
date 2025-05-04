@@ -1,80 +1,1311 @@
 @use "sass:color";
 
-.dashboard-container {
-  padding: 2rem;
-  padding-top: 90px; /* Ajout d'un padding suffisant pour éviter que le contenu soit masqué par la navbar (70px + marge) */
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: #f9f9f9;
-  min-height: calc(100vh - 80px);
-  position: relative; /* Pour assurer un bon positionnement des éléments internes */
+// Variables de couleur et de design
+$primary-color: #cb6ce6; // Violet principal d'ARMA-CARE
+$secondary-color: #7AE642; // Vert d'ARMA-CARE
+$dark-color: #2c3e50; // Couleur sombre pour la sidebar
+$light-color: #f8f9fa; // Couleur claire pour le fond
+$text-color: #333; // Couleur de texte principale
+$text-light: #ecf0f1; // Couleur de texte claire
+$border-radius: 10px; // Rayon de bordure standard
+$card-radius: 12px; // Rayon de bordure pour les cartes
+$box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); // Ombre standard
+$hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.12); // Ombre au survol
+
+// Variables de mise en page
+$sidebar-width: 280px; // Largeur de la sidebar déployée
+$sidebar-collapsed-width: 70px; // Largeur de la sidebar réduite
+$header-height: 70px; // Hauteur de l'en-tête
+$navbar-height: 70px; // Hauteur de la navbar
+$transition-speed: 0.3s; // Vitesse de transition
+
+// Variables pour les indicateurs visuels
+$success-color: #28a745; // Vert pour les succès
+$warning-color: #ffc107; // Jaune pour les avertissements
+$danger-color: #dc3545; // Rouge pour les erreurs
+$info-color: #17a2b8; // Bleu pour les informations
+
+// Mixins utiles
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Styles pour l'en-tête du tableau de bord */
-.dashboard-header {
-  margin-bottom: 2rem;
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin card {
+  background-color: #fff;
+  border-radius: $card-radius;
+  box-shadow: $box-shadow;
+  transition: all 0.3s ease;
+  overflow: hidden;
   
-  h1 {
-    margin-bottom: 1rem;
-    color: #333;
-    font-weight: 600;
+  &:hover {
+    box-shadow: $hover-shadow;
+    transform: translateY(-3px);
   }
+}
+
+// Layout principal modernisé
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  background-color: $light-color;
+  font-family: 'Roboto', 'Arial', sans-serif;
+}
+
+// Message de bienvenue avec animation
+.welcome-message {
+  position: fixed;
+  top: $navbar-height + 20px;
+  right: 20px;
+  z-index: 1200;
+  animation: slideInRight 0.5s ease, fadeOut 0.5s ease 4.5s forwards;
   
-  .user-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  .welcome-content {
+    @include flex-center;
+    background: linear-gradient(135deg, $primary-color, darken($primary-color, 15%));
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba($primary-color, 0.3);
     
-    .professional-details {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+    i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+      color: $secondary-color;
+    }
+    
+    span {
+      font-weight: 500;
+    }
+  }
+}
+
+// Sidebar moderne et professionnelle
+.sidebar {
+  width: $sidebar-width;
+  height: calc(100vh - $navbar-height); // Hauteur moins celle de la navbar
+  background: linear-gradient(180deg, $dark-color, darken($dark-color, 8%));
+  box-shadow: 3px 0 15px rgba(0, 0, 0, 0.15);
+  position: fixed;
+  top: $navbar-height; // Commence après la navbar
+  left: 0;
+  z-index: 1000;
+  transition: all $transition-speed ease;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  color: $text-light;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  
+  &.collapsed {
+    width: $sidebar-collapsed-width;
+    
+    .menu-section, .section-title, .footer-links, .notification-badge {
+      display: none;
+    }
+    
+    .menu-item {
+      padding: 0.8rem;
+      justify-content: center;
       
-      .greeting {
-        color: #666;
-      }
-      
-      .professional-name {
-        font-weight: 600;
-        color: #cb6ce6; // Couleur primaire de l'application
-        font-size: 1.1rem;
-      }
-      
-      .professional-speciality {
-        color: #666;
-        font-style: italic;
+      i {
+        margin-right: 0;
+        font-size: 1.4rem;
       }
     }
     
-    .btn-logout {
-      background-color: #f8f9fa;
-      border: 1px solid #ddd;
-      color: #333;
+    .account-status {
+      display: none;
+    }
+  }
+  
+  // En-tête de la sidebar avec bouton de bascule
+  .sidebar-header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: rgba(0, 0, 0, 0.15);
+    
+    .toggle-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      color: $text-light;
+      cursor: pointer;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: center;
       transition: all 0.2s ease;
       
       &:hover {
-        background-color: #e9ecef;
-        color: #cb6ce6;
+        background-color: rgba(255, 255, 255, 0.15);
+        color: $secondary-color;
+        transform: scale(1.05);
+      }
+      
+      &:active {
+        transform: scale(0.95);
+      }
+      
+      i {
+        font-size: 1rem;
+      }
+    }
+  }
+  
+  .sidebar-user {
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
+    
+    .profile-link {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        .profile-edit-link {
+          color: $secondary-color;
+          text-decoration: underline;
+        }
+        
+        .user-avatar {
+          border-color: $secondary-color;
+          transform: scale(1.05);
+        }
+      }
+    }
+    
+    .user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba($primary-color, 0.7);
+      transition: all 0.2s ease;
+      
+      i {
+        font-size: 1.8rem;
+        color: #ecf0f1;
+      }
+    }
+    
+    .user-info {
+      overflow: hidden;
+      
+      .user-name {
+        font-weight: 600;
+        color: #ecf0f1;
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 0.2rem;
+      }
+      
+      .user-role {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 0.4rem;
+      }
+      
+      .profile-edit-link {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.6);
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        
+        i {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+  
+  // Menu de navigation principal
+  .sidebar-menu {
+    flex: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+    
+    // Sections du menu
+    .menu-section {
+      padding: 1rem 1.5rem 0.5rem;
+      opacity: 0.7;
+      
+      .section-title {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 600;
+      }
+    }
+    
+    // Éléments du menu
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 0.9rem 1.5rem;
+      color: rgba(255, 255, 255, 0.85);
+      transition: all 0.25s ease;
+      cursor: pointer;
+      position: relative;
+      margin-bottom: 0.2rem;
+      border-radius: 0 30px 30px 0;
+      margin-right: 1rem;
+      justify-content: space-between;
+      
+      // Contenu principal de l'élément
+      i {
+        font-size: 1.2rem;
+        min-width: 25px;
+        margin-right: 1rem;
+      }
+      
+      span {
+        white-space: nowrap;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        flex-grow: 1;
+      }
+      
+      // Badge de notification
+      .notification-badge {
+        background-color: $secondary-color;
+        color: $dark-color;
+        border-radius: 12px;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        min-width: 20px;
+        text-align: center;
+      }
+      
+      // États au survol et actif
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        transform: translateX(5px);
+      }
+      
+      &.active {
+        color: $secondary-color;
+        background-color: rgba(0, 0, 0, 0.2);
+        font-weight: 600;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 4px;
+          background-color: $secondary-color;
+        }
+        
+        i {
+          color: $secondary-color;
+        }
+      }
+    }
+    
+    // Statut du compte avec design amélioré
+    .account-status {
+      margin: 1.5rem 1rem;
+      padding: 1.2rem;
+      background-color: rgba(0, 0, 0, 0.15);
+      border-radius: 12px;
+      border-left: 4px solid $secondary-color;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      
+      .status-title {
+        font-weight: 600;
+        color: $text-light;
+        margin-bottom: 0.8rem;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          background-color: $secondary-color;
+          border-radius: 50%;
+          margin-right: 8px;
+        }
+      }
+      
+      .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        
+        i {
+          font-size: 1.1rem;
+        }
+        
+        &:hover {
+          transform: translateX(3px);
+        }
+      }
+      
+      .status-pending {
+        background: linear-gradient(135deg, rgba(240, 173, 78, 0.1), rgba(240, 173, 78, 0.2));
+        color: #f0ad4e;
+        border-left: 3px solid #f0ad4e;
+        
+        i {
+          color: #f0ad4e;
+        }
+      }
+      
+      .status-verified {
+        background: linear-gradient(135deg, rgba($secondary-color, 0.1), rgba($secondary-color, 0.2));
+        color: $secondary-color;
+        border-left: 3px solid $secondary-color;
+        
+        i {
+          color: $secondary-color;
+        }
+      }
+      
+      .status-rejected {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(220, 53, 69, 0.2));
+        color: #dc3545;
+        border-left: 3px solid #dc3545;
+        
+        i {
+          color: #dc3545;
+        }
+      }
+      
+      .status-suspended {
+        background: linear-gradient(135deg, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2));
+        color: #007bff;
+        border-left: 3px solid #007bff;
+        
+        i {
+          color: #007bff;
+        }
+      }
+    }
+  }
+  
+  // Footer de la sidebar avec liens et bouton de déconnexion
+  .sidebar-footer {
+    padding: 1rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: rgba(0, 0, 0, 0.15);
+    margin-top: auto;
+    
+    // Liens utiles dans le footer
+    .footer-links {
+      padding: 0.5rem 1.5rem;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      
+      a {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        transition: all 0.2s ease;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        
+        &:hover {
+          color: $secondary-color;
+          background-color: rgba(255, 255, 255, 0.05);
+        }
+      }
+    }
+    
+    // Bouton de déconnexion
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 0.9rem 1.5rem;
+      color: rgba(255, 255, 255, 0.8);
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border-radius: 0 30px 30px 0;
+      margin: 0.5rem 1rem 0.5rem 0;
+      
+      i {
+        font-size: 1.2rem;
+        min-width: 25px;
+        margin-right: 1rem;
+      }
+      
+      span {
+        white-space: nowrap;
+        font-weight: 500;
+      }
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateX(5px);
+      }
+      
+      &.logout-btn {
+        border-left: 3px solid transparent;
+        
+        &:hover {
+          background-color: rgba(220, 53, 69, 0.15);
+          color: #dc3545;
+          border-left: 3px solid #dc3545;
+          
+          i {
+            color: #dc3545;
+          }
+        }
       }
     }
   }
 }
 
-/* Message de bienvenue temporaire */
+// Contenu principal du dashboard
+.main-content {
+  flex: 1;
+  margin-left: $sidebar-width;
+  padding: 2rem 2.5rem;
+  transition: all $transition-speed ease;
+  min-height: calc(100vh - $navbar-height);
+  padding-top: 90px; // Espace pour éviter que le contenu soit caché par la navbar
+  padding-bottom: 80px; // Espace pour éviter que le contenu soit caché par le footer
+  background-color: $light-color;
+  position: relative;
+  
+  &.expanded {
+    margin-left: $sidebar-collapsed-width;
+  }
+  
+  // En-tête du tableau de bord
+  .dashboard-header {
+    @include flex-between;
+    margin-bottom: 2.5rem;
+    
+    .header-left {
+      .page-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: $text-color;
+        margin: 0 0 0.5rem 0;
+        position: relative;
+        display: inline-block;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -8px;
+          left: 0;
+          width: 40px;
+          height: 4px;
+          background: linear-gradient(90deg, $primary-color, $secondary-color);
+          border-radius: 2px;
+        }
+      }
+      
+      .page-subtitle {
+        font-size: 1.1rem;
+        color: rgba($text-color, 0.7);
+        margin: 0;
+        
+        .professional-name {
+          color: $primary-color;
+          font-weight: 600;
+        }
+      }
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      
+      .date-display {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: rgba($text-color, 0.7);
+        font-size: 0.9rem;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+        padding: 0.6rem 1rem;
+        border-radius: 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(5px);
+        
+        i {
+          color: $primary-color;
+          font-size: 1.1rem;
+          transition: all 0.3s ease;
+        }
+        
+        &:hover {
+          box-shadow: 0 4px 15px rgba($primary-color, 0.15);
+          transform: translateY(-2px);
+          
+          i {
+            transform: scale(1.1);
+            color: darken($primary-color, 10%);
+          }
+          
+          span {
+            color: $text-color;
+          }
+        }
+      }
+      
+      .profile-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: $text-color;
+        text-decoration: none;
+        background-color: white;
+        padding: 0.6rem 1rem;
+        border-radius: 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        
+        i {
+          color: $primary-color;
+          font-size: 1.1rem;
+        }
+        
+        &:hover {
+          background-color: $primary-color;
+          color: white;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba($primary-color, 0.3);
+          
+          i {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Indicateurs de chargement et d'erreur
+.loading-container {
+  @include flex-center;
+  flex-direction: column;
+  min-height: 300px;
+  
+  .spinner {
+    margin-bottom: 1rem;
+    color: $primary-color;
+  }
+  
+  p {
+    color: rgba($text-color, 0.7);
+    font-size: 0.95rem;
+  }
+}
+
+.error-message {
+  background-color: rgba($danger-color, 0.1);
+  border-left: 4px solid $danger-color;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  
+  i {
+    color: $danger-color;
+    font-size: 1.2rem;
+  }
+  
+  span {
+    color: $text-color;
+    font-size: 0.95rem;
+  }
+}
+
+// Sections animées
+.animated-section {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+// Cartes de résumé avec animations
+.dashboard-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+  justify-content: center;
+  
+  // Animation séquentielle des cartes
+  .summary-card {
+    opacity: 0;
+    animation: slideUp 0.5s ease-out forwards;
+    
+    &:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+    
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    &:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+    
+    &:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+    @include card;
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    max-height: 80px;
+    width: 100%;
+    box-sizing: border-box;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: $primary-color;
+    }
+    
+    .summary-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 15px;
+      @include flex-center;
+      justify-content: center;
+      margin-right: 1.2rem;
+      flex-shrink: 0;
+      
+      i {
+        font-size: 1.8rem;
+        color: white;
+      }
+      
+      &.pending {
+        background-color: #e74c3c;
+      }
+      
+      &.completed {
+        background-color: $secondary-color;
+      }
+      
+      &.appointments {
+        background-color: #3498db;
+      }
+      
+      &.financial {
+        background-color: #f39c12;
+      }
+    }
+    
+    .summary-info {
+      flex: 1;
+      
+      h3 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: $text-color;
+        margin: 0 0 0.3rem 0;
+      }
+      
+      p {
+        color: rgba($text-color, 0.7);
+        margin: 0 0 0.5rem 0;
+        font-size: 0.8rem;
+      }
+      
+      .progress-bar {
+        height: 4px;
+        background-color: rgba($text-color, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-top: 0.3rem;
+        
+        .progress {
+          height: 100%;
+          border-radius: 2px;
+          background: linear-gradient(90deg, $primary-color, $secondary-color);
+        }
+      }
+    }
+  }
+}
+
+// Grille du dashboard pour les cartes
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  
+  .dashboard-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    
+    &.main-column {
+      height: 100%;
+      
+      .actions-card {
+        height: 100%;
+      }
+    }
+    
+    &.secondary-column {
+      .activity-card {
+        flex: 1;
+      }
+      
+      .appointments-card {
+        flex: 2;
+      }
+    }
+  }
+  
+  // Animation séquentielle des cartes
+  .card {
+    opacity: 0;
+    animation: slideUp 0.5s ease-out forwards;
+    
+    &.actions-card {
+      animation-delay: 0.5s;
+    }
+    
+    &.activity-card {
+      animation-delay: 0.6s;
+    }
+    
+    &.appointments-card {
+      animation-delay: 0.7s;
+    }
+    @include card;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+    
+    .card-header {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid rgba($text-color, 0.1);
+      @include flex-between;
+      background-color: $dark-color;
+      
+      i {
+        font-size: 1.3rem;
+        color: $secondary-color;
+        margin-right: 0.8rem;
+      }
+      
+      h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: $text-light;
+        margin: 0;
+        flex: 1;
+      }
+    }
+    
+    .card-body {
+      padding: 1.5rem;
+    }
+    
+    // Styles pour les actions rapides
+    &.actions-card {
+      .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        
+        .action-btn {
+          background: white;
+          border: 1px solid rgba($text-color, 0.1);
+          border-radius: 12px;
+          padding: 1.2rem 1rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.8rem;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+          
+          i {
+            font-size: 1.8rem;
+            color: $dark-color;
+            transition: all 0.3s ease;
+          }
+          
+          span {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: $text-color;
+            text-align: center;
+            transition: all 0.3s ease;
+          }
+          
+          &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba($dark-color, 0.15);
+            border-color: $dark-color;
+            
+            i {
+              color: $secondary-color;
+              transform: scale(1.1);
+            }
+            
+            span {
+              color: $dark-color;
+              font-weight: 600;
+            }
+          }
+          
+          &:active {
+            transform: translateY(-2px);
+          }
+        }
+      }
+    }
+    
+    // Styles pour la liste d'activités récentes
+    &.activity-card {
+      .activity-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        
+        .activity-item {
+          display: flex;
+          align-items: flex-start;
+          padding: 1rem 0;
+          border-bottom: 1px solid rgba($text-color, 0.05);
+          
+          &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+          }
+          
+          .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            @include flex-center;
+            margin-right: 1rem;
+            background: linear-gradient(135deg, rgba($primary-color, 0.1), rgba($secondary-color, 0.1));
+            flex-shrink: 0;
+            
+            i {
+              font-size: 1.2rem;
+              color: $primary-color;
+            }
+          }
+          
+          .activity-content {
+            flex: 1;
+            
+            .activity-text {
+              margin: 0 0 0.3rem 0;
+              font-weight: 500;
+              color: $text-color;
+              font-size: 0.95rem;
+            }
+            
+            .activity-time {
+              margin: 0;
+              font-size: 0.8rem;
+              color: rgba($text-color, 0.6);
+            }
+          }
+        }
+      }
+    }
+    
+    // Styles pour les rendez-vous
+    &.appointments-card {
+      .appointments-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        
+        .appointment-item {
+          display: flex;
+          align-items: center;
+          padding: 1rem 0;
+          border-bottom: 1px solid rgba($text-color, 0.1);
+          
+          &:last-child {
+            border-bottom: none;
+          }
+          
+          .appointment-time {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: rgba($primary-color, 0.1);
+            border-radius: 10px;
+            margin-right: 1rem;
+            
+            .day {
+              font-size: 1.2rem;
+              font-weight: 700;
+              color: $primary-color;
+            }
+            
+            .month {
+              font-size: 0.8rem;
+              color: rgba($text-color, 0.7);
+            }
+          }
+          
+          .appointment-details {
+            flex: 1;
+            
+            h4 {
+              margin: 0 0 0.3rem 0;
+              font-size: 1rem;
+              font-weight: 600;
+              color: $text-color;
+            }
+            
+            p {
+              margin: 0;
+              font-size: 0.85rem;
+              color: rgba($text-color, 0.7);
+              
+              i {
+                color: $primary-color;
+                margin-right: 0.3rem;
+              }
+            }
+          }
+          
+          .appointment-actions {
+            .btn-icon {
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+              background-color: rgba($primary-color, 0.1);
+              border: none;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              
+              i {
+                font-size: 0.9rem;
+                color: $primary-color;
+              }
+              
+              &:hover {
+                background-color: $primary-color;
+                
+                i {
+                  color: white;
+                }
+              }
+            }
+          }
+        }
+      }
+      
+  // Styles pour les dossiers médicaux
+  .medical-records-section {
+    margin-top: 2rem;
+  }
+  
+  .medical-records-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    .record-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba($text-color, 0.1);
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .record-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background-color: rgba($secondary-color, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        
+        i {
+          font-size: 1.2rem;
+          color: $secondary-color;
+        }
+      }
+      
+      .record-details {
+        flex: 1;
+        
+        h4 {
+          margin: 0 0 0.3rem 0;
+          font-size: 1rem;
+          font-weight: 600;
+          color: $text-color;
+        }
+        
+        p {
+          margin: 0;
+          font-size: 0.85rem;
+          color: rgba($text-color, 0.7);
+          
+          .date {
+            color: $primary-color;
+          }
+        }
+      }
+      
+      .record-actions {
+        .btn-icon {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background-color: rgba($secondary-color, 0.1);
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          
+          i {
+            font-size: 0.9rem;
+            color: $secondary-color;
+          }
+          
+          &:hover {
+            background-color: $secondary-color;
+            
+            i {
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // Styles pour les clients suivis
+  .clients-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    .client-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba($text-color, 0.1);
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .client-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: $dark-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        
+        span {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: white;
+        }
+      }
+      
+      .client-details {
+        flex: 1;
+        
+        h4 {
+          margin: 0 0 0.3rem 0;
+          font-size: 1rem;
+          font-weight: 600;
+          color: $text-color;
+        }
+        
+        p {
+          margin: 0;
+          font-size: 0.85rem;
+          color: rgba($text-color, 0.7);
+          
+          .date {
+            color: $primary-color;
+          }
+        }
+      }
+      
+      .client-status {
+        .status {
+          padding: 0.3rem 0.8rem;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          
+          &.active {
+            background-color: rgba($secondary-color, 0.1);
+            color: $secondary-color;
+          }
+          
+          &.pending {
+            background-color: rgba(#f39c12, 0.1);
+            color: #f39c12;
+          }
+          
+          &.inactive {
+            background-color: rgba(#e74c3c, 0.1);
+            color: #e74c3c;
+          }
+        }
+      }
+    }
+  }
+      
+      .view-all {
+        text-align: center;
+        margin-top: 1rem;
+        
+        a {
+          color: $primary-color;
+          text-decoration: none;
+          font-size: 0.9rem;
+          font-weight: 500;
+          display: inline-flex;
+          align-items: center;
+          transition: all 0.2s ease;
+          
+          i {
+            margin-left: 0.4rem;
+            transition: transform 0.2s ease;
+          }
+          
+          &:hover {
+            color: darken($primary-color, 10%);
+            
+            i {
+              transform: translateX(3px);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animations keyframes
+@keyframes slideInRight {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Message de bienvenue avec animation
 .welcome-message {
   position: fixed;
-  top: 20px;
+  top: $navbar-height + 20px;
   right: 20px;
-  z-index: 1000;
-  animation: fadeIn 0.5s ease-out, fadeOut 0.5s ease-in 4.5s forwards;
+  z-index: 1200;
+  animation: slideInRight 0.5s ease, fadeOut 0.5s ease 4.5s forwards;
   
   .welcome-content {
     background-color: rgba(122, 230, 66, 0.9);
@@ -216,70 +1447,106 @@
   }
 }
 
+// Contenu du dashboard
 .dashboard-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin-top: 2rem;
-  max-width: 800px; // Largeur maximale plus petite pour les cartes
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+}
+
+// Cartes de résumé
+.dashboard-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  
+  .summary-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .summary-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background-color: rgba($primary-color, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0.8rem;
+      
+      i {
+        font-size: 1.2rem;
+        color: $primary-color;
+      }
+    }
+    
+    .summary-info {
+      h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #333;
+        margin: 0 0 0.15rem 0;
+      }
+      
+      p {
+        margin: 0;
+        color: #666;
+        font-size: 0.8rem;
+      }
+    }
+    
+    &:nth-child(2) .summary-icon {
+      background-color: rgba($secondary-color, 0.1);
+      
+      i {
+        color: $secondary-color;
+      }
+    }
+    
+    &:nth-child(3) .summary-icon {
+      background-color: rgba(#3498db, 0.1);
+      
+      i {
+        color: #3498db;
+      }
+    }
+    
+    &:nth-child(4) .summary-icon {
+      background-color: rgba(#f39c12, 0.1);
+      
+      i {
+        color: #f39c12;
+      }
+    }
+  }
 }
 
 .card {
   background-color: #fff;
-  border-radius: 20px;
+  border-radius: 15px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-top: 3px solid #cb6ce6;
+  border-top: 3px solid $primary-color;
+  margin-bottom: 1.5rem;
   
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
   }
   
-  &.profile-card {
-    .card-body {
-      padding: 1.5rem;
-      
-      .profile-info {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-        
-        .info-group {
-          h4 {
-            font-size: 1.1rem;
-            color: #333;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #eee;
-          }
-          
-          .info-row {
-            display: flex;
-            margin-bottom: 0.75rem;
-            align-items: baseline;
-            
-            .info-label {
-              width: 40%;
-              font-weight: 500;
-              color: #666;
-              padding-right: 1rem;
-            }
-            
-            .info-value {
-              width: 60%;
-              color: #333;
-              font-weight: 400;
-            }
-          }
-        }
-      }
-    }
-  }
-
   .card-header {
     padding: 1.2rem 1.5rem;
     background-color: #f8f9fa;
@@ -451,31 +1718,108 @@
   }
 }
 
+// Media queries pour la responsivité
+@media (max-width: 1200px) {
+  .dashboard-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    width: $sidebar-collapsed-width;
+    
+    .sidebar-menu span, .sidebar-footer span, .account-status {
+      display: none;
+    }
+  }
+  
+  .main-content {
+    margin-left: $sidebar-collapsed-width;
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    
+    .header-actions {
+      align-self: flex-end;
+    }
   }
 
-  .dashboard-content {
+  .dashboard-summary {
     grid-template-columns: 1fr;
-  }
-
-  .info-card .info-item {
-    flex-direction: column;
-    align-items: flex-start;
-    
-    .info-label, .info-value {
-      flex: 1 0 100%;
-    }
-    
-    .info-label {
-      margin-bottom: 0.5rem;
-    }
   }
   
   .quick-actions {
     grid-template-columns: 1fr;
+  }
+  
+  .status-card {
+    .status-indicator {
+      flex-direction: column;
+      padding: 1rem;
+      
+      i {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    width: 0;
+    overflow: hidden;
+    
+    &.collapsed {
+      width: 0;
+    }
+    
+    &:not(.collapsed) {
+      width: 100%;
+      z-index: 1100;
+    }
+  }
+  
+  .main-content {
+    margin-left: 0;
+    padding: 1rem;
+    
+    &.expanded {
+      margin-left: 0;
+    }
+  }
+  
+  .dashboard-header {
+    h1 {
+      font-size: 1.3rem;
+    }
+  }
+  
+  .summary-card {
+    padding: 1rem;
+    
+    .summary-icon {
+      width: 40px;
+      height: 40px;
+      
+      i {
+        font-size: 1.2rem;
+      }
+    }
+    
+    .summary-info {
+      h3 {
+        font-size: 1.3rem;
+      }
+      
+      p {
+        font-size: 0.8rem;
+      }
+    }
   }
 }

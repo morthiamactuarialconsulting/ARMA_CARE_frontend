@@ -1,0 +1,67 @@
+.modal-content {
+  border-radius: 1.1rem;
+  box-shadow: 0 0.5rem 2rem rgba(80, 40, 120, 0.12);
+}
+.modal-header {
+  border-bottom: 1px solid #eee;
+  background: linear-gradient(90deg, #cb6ce6 0%, #6c63ff 100%);
+  color: #fff;
+  border-radius: 1.1rem 1.1rem 0 0;
+}
+.modal-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: .5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.avatar-lg {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #f4f2fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.6rem auto;
+}
+.status-badge {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  padding: 0.4rem 1.1rem;
+  border-radius: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.table th {
+  width: 190px;
+  color: #6c63ff;
+  font-weight: 500;
+  padding-right: 0.7rem;
+}
+.table td {
+  color: #232323;
+}
+.btn-link {
+  color: #6c63ff;
+  font-weight: 500;
+  text-decoration: underline;
+  padding: 0;
+}
+.btn-link:hover {
+  color: #cb6ce6;
+}
+.modal-footer {
+  border-top: 1px solid #eee;
+  background: #f9f8fd;
+  border-radius: 0 0 1.1rem 1.1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+.btn-danger.me-auto {
+  margin-right: auto;
+}

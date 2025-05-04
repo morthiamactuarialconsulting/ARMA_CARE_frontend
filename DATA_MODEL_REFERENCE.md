@@ -150,9 +150,10 @@ export interface PasswordResetToken {
 ```typescript
 export enum AccountStatus {
   PENDING_VERIFICATION = 'PENDING_VERIFICATION',
-  VERIFIED = 'VERIFIED',
+  ACTIVE = 'ACTIVE',
   REJECTED = 'REJECTED',
-  SUSPENDED = 'SUSPENDED'
+  SUSPENDED = 'SUSPENDED',
+  INACTIVE = 'INACTIVE'
 }
 ```
 

@@ -161,13 +161,25 @@ Le tableau de bord propose également un accès direct aux fonctionnalités fré
 
 ### Gestion des utilisateurs
 
-- **Validation des comptes** : Examinez et approuvez les demandes d'inscription
-- **Gestion des droits** : Attribuez des rôles et permissions aux utilisateurs
-- **Suspension de compte** : Désactivez temporairement ou définitivement un compte
+- **Validation des comptes** : Examinez et approuvez les demandes d'inscription des professionnels de santé
+- **Gestion des administrateurs** : Créez et gérez d'autres comptes administrateurs
+- **Suspension de compte** : Désactivez temporairement ou définitivement un compte professionnel
+
+### Premier démarrage du système
+
+- **Création du premier administrateur** : Configuration initiale du système ARMA-CARE
+- **Vérification automatique** : Le système vérifie si un administrateur existe déjà
+- **Formulaire sécurisé** : Interface dédiée avec recommandations de sécurité
+
+### Gestion des administrateurs
+
+- **Tableau de bord administrateur** : Navigation entre sections professionnels et administrateurs
+- **Ajout d'administrateurs** : Formulaire dédié pour créer de nouveaux comptes administrateurs
+- **Bonnes pratiques** : Recommandations de sécurité intégrées à l'interface
 
 ### Supervision du système
 
-- **Tableau de bord administrateur** : Visualisez les statistiques d'utilisation
+- **Tableau de bord analytique** : Visualisez les statistiques d'utilisation
 - **Logs système** : Consultez les journaux d'activité du système
 - **Maintenance** : Programmez et gérez les opérations de maintenance
 

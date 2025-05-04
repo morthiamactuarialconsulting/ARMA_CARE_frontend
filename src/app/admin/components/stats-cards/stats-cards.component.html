@@ -1,0 +1,134 @@
+<!-- Section Statistiques simplifiée avec cartes cliquables -->
+<div class="dashboard-stats-cards animated-section">
+  <!-- Carte de statistiques totales cliquable -->
+  <div class="stat-card total" title="Nombre total de professionnels dans le système" (click)="changeTab('all')">
+    <div class="card-decoration"></div>
+    <div class="card-header">
+      <div class="summary-icon total">
+        <i class="bi bi-people-fill" aria-hidden="true"></i>
+      </div>
+      <div class="trend-indicator" *ngIf="totalTrend > 0">
+        <i class="bi bi-graph-up-arrow"></i>
+        <span>+{{ totalTrend }}%</span>
+      </div>
+    </div>
+    <div class="stat-info">
+      <span class="stat-value">{{ totalCount }}</span>
+      <span class="stat-label">Total professionnels</span>
+      <div class="progress">
+        <div class="progress-bar total-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carte des professionnels en attente cliquable -->
+  <div class="stat-card pending priority" title="Professionnels en attente de vérification" 
+       [class.has-alert]="pendingCount > 0" (click)="changeTab('pending')">
+    <div class="card-decoration"></div>
+    <div class="card-header">
+      <div class="summary-icon pending">
+        <i class="bi bi-hourglass-split" aria-hidden="true"></i>
+      </div>
+      <div class="alert-badge" *ngIf="pendingCount > 0">Attention</div>
+    </div>
+    <div class="stat-info">
+      <span class="stat-value">{{ pendingCount }}</span>
+      <span class="stat-label">En attente</span>
+      <div class="progress">
+        <div class="progress-bar pending-bar" [style.width.%]="(pendingCount/totalCount)*100"></div>
+      </div>
+      <div class="stat-context" *ngIf="pendingCount > 0">
+        <i class="bi bi-clock-history"></i>
+        <span>Requiert votre attention</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carte des professionnels actifs cliquable -->
+  <div class="stat-card active" title="Professionnels actifs et vérifiés" (click)="changeTab('active')">
+    <div class="card-decoration"></div>
+    <div class="card-header">
+      <div class="summary-icon active">
+        <i class="bi bi-check-circle" aria-hidden="true"></i>
+      </div>
+      <div class="trend-indicator" *ngIf="activeTrend !== undefined">
+        <i [class]="activeTrend > 0 ? 'bi bi-graph-up-arrow' : 'bi bi-graph-down-arrow'"></i>
+        <span [class]="activeTrend > 0 ? 'positive' : 'negative'">{{ activeTrend > 0 ? '+' : '' }}{{ activeTrend }}%</span>
+      </div>
+    </div>
+    <div class="stat-info">
+      <span class="stat-value">{{ activeCount }}</span>
+      <span class="stat-label">Actifs</span>
+      <div class="progress">
+        <div class="progress-bar active-bar" [style.width.%]="(activeCount/totalCount)*100"></div>
+      </div>
+      <div class="stat-context">
+        <i class="bi bi-shield-check"></i>
+        <span>{{ (activeCount/totalCount*100).toFixed(1) }}% du total</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carte des professionnels rejetés cliquable -->
+  <div class="stat-card rejected" title="Professionnels dont la demande a été rejetée" (click)="changeTab('rejected')">
+    <div class="card-decoration"></div>
+    <div class="card-header">
+      <div class="summary-icon rejected">
+        <i class="bi bi-x-circle" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="stat-info">
+      <span class="stat-value">{{ rejectedCount }}</span>
+      <span class="stat-label">Rejetés</span>
+      <div class="progress">
+        <div class="progress-bar rejected-bar" [style.width.%]="(rejectedCount/totalCount)*100"></div>
+      </div>
+      <div class="stat-context" *ngIf="mostCommonRejectionReason">
+        <i class="bi bi-info-circle"></i>
+        <span>Raison commune: {{ mostCommonRejectionReason }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carte des professionnels suspendus cliquable -->
+  <div class="stat-card suspended" title="Professionnels temporairement suspendus" (click)="changeTab('suspended')">
+    <div class="card-decoration"></div>
+    <div class="card-header">
+      <div class="summary-icon suspended">
+        <i class="bi bi-pause-circle" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="stat-info">
+      <span class="stat-value">{{ suspendedCount }}</span>
+      <span class="stat-label">Suspendus</span>
+      <div class="progress">
+        <div class="progress-bar suspended-bar" [style.width.%]="(suspendedCount/totalCount)*100"></div>
+      </div>
+      <div class="stat-context" *ngIf="averageSuspensionDays !== undefined">
+        <i class="bi bi-calendar-check"></i>
+        <span>~{{ averageSuspensionDays }} jours en moyenne</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carte des professionnels inactifs cliquable -->
+  <div class="stat-card inactive" title="Professionnels inactifs ou désactivés" (click)="changeTab('inactive')">
+    <div class="card-decoration"></div>
+    <div class="card-header">
+      <div class="summary-icon inactive">
+        <i class="bi bi-slash-circle" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="stat-info">
+      <span class="stat-value">{{ inactiveCount }}</span>
+      <span class="stat-label">Inactifs</span>
+      <div class="progress">
+        <div class="progress-bar inactive-bar" [style.width.%]="(inactiveCount/totalCount)*100"></div>
+      </div>
+      <div class="stat-context" *ngIf="lastInactiveDays !== undefined">
+        <i class="bi bi-clock-history"></i>
+        <span>{{ lastInactiveDays }} jours depuis la dernière mise à jour</span>
+      </div>
+    </div>
+  </div>
+</div>

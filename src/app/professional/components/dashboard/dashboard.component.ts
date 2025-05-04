@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Component, OnInit, HostListener, LOCALE_ID, Inject } from '@angular/core';
+import { CommonModule, DatePipe, registerLocaleData } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import localeFr from '@angular/common/locales/fr';
+
+// Enregistrement de la locale française
+registerLocaleData(localeFr);
 import { AuthService } from '../../../shared/services/auth.service';
 import { Professional } from '../../../shared/models/professional.model';
 
 @Component({
   selector: 'app-professional-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, DatePipe],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -17,10 +21,14 @@ export class ProfessionalDashboardComponent implements OnInit {
   error = '';
   welcomeMessage = false;
   userName = '';
+  sidebarCollapsed = false;
+  isMobile = false;
+  today: Date = new Date(); // Date actuelle pour l'affichage dans le header
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    @Inject(LOCALE_ID) private locale: string
   ) {
     console.log('[PROFESSIONAL-DASHBOARD] Construction du composant de tableau de bord professionnel');
     console.log('[PROFESSIONAL-DASHBOARD] Route actuelle:', this.router.url);
@@ -59,8 +67,34 @@ export class ProfessionalDashboardComponent implements OnInit {
     console.log('[PROFESSIONAL-DASHBOARD] Accès autorisé au tableau de bord professionnel');
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  /**
+   * Vérifie la taille de l'écran et ajuste l'état de la sidebar en conséquence
+   */
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 992;
+    if (this.isMobile && !this.sidebarCollapsed) {
+      this.sidebarCollapsed = true;
+    }
+  }
+
+  /**
+   * Bascule l'état de la sidebar entre déplié et replié
+   */
+  toggleSidebar() {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+    console.log('[PROFESSIONAL-DASHBOARD] Sidebar toggled:', this.sidebarCollapsed ? 'collapsed' : 'expanded');
+  }
+
   ngOnInit(): void {
     console.log('[PROFESSIONAL-DASHBOARD] Début de l\'initialisation du dashboard professionnel');
+    
+    // Vérifier la taille de l'écran au chargement
+    this.checkScreenSize();
     
     // Vérification supplémentaire de l'authentification
     if (!this.authService.isLoggedIn()) {
@@ -126,15 +160,29 @@ export class ProfessionalDashboardComponent implements OnInit {
         address: currentUser.address || 'N/A',
         city: currentUser.city || 'N/A',
         country: currentUser.country || 'France',
-        accountStatus: currentUser.accountStatus || 'VERIFIED'
+        accountStatus: currentUser.accountStatus || 'VERIFIED',
+        // Ajout des statistiques pour le tableau de bord (données simulées)
+        stats: {
+          pendingRequests: 12,
+          completedRequests: 45,
+          upcomingAppointments: 8,
+          pendingAmount: '2 450 €'
+        }
       };
       
       console.log('[PROFESSIONAL-DASHBOARD] Email utilisé:', currentUser.username);
-      
       console.log('[PROFESSIONAL-DASHBOARD] Données professionnelles traitées:', this.professional);
+      
+      // Vérification de sécurité pour s'assurer que les données sont valides
+      if (!this.professional.firstName || !this.professional.lastName) {
+        console.warn('[PROFESSIONAL-DASHBOARD] SÉCURITÉ: Données professionnelles incomplètes');
+      }
     }, 1000);
   }
 
+  /**
+   * Déconnecte l'utilisateur et le redirige vers la page de connexion
+   */
   logout(): void {
     console.log('[PROFESSIONAL-DASHBOARD] Déconnexion de l\'utilisateur en cours...');
     // Vérifier l'authentification avant la déconnexion
@@ -150,6 +198,9 @@ export class ProfessionalDashboardComponent implements OnInit {
     this.router.navigate(['/auth/login']);
   }
   
+  /**
+   * Redirige l'utilisateur vers le tableau de bord approprié en fonction de ses rôles
+   */
   navigateBasedOnRole(): void {
     const userRoles = this.authService.getCurrentUser()?.roles || [];
     console.log('[PROFESSIONAL-DASHBOARD] Redirection basée sur les rôles:', userRoles);

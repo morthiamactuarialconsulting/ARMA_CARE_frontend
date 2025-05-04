@@ -1,29 +1,31 @@
 export enum AccountStatus {
   PENDING_VERIFICATION = 'PENDING_VERIFICATION',
-  VERIFIED = 'VERIFIED',
+  ACTIVE = 'ACTIVE',
   REJECTED = 'REJECTED',
-  SUSPENDED = 'SUSPENDED'
+  SUSPENDED = 'SUSPENDED',
+  INACTIVE = 'INACTIVE'
 }
 
 export interface Professional {
   id?: number;
-  username?: string;
   firstName: string;
   lastName: string;
   speciality: string;
   phone: string;
-  email?: string;
+  email: string;
   address: string;
   city: string;
   country: string;
   registrationNumber: string;
+  bankAccountNumberPath?: string;
   identityDocumentPath?: string;
   diplomaPath?: string;
   licensePath?: string;
   professionalInsurancePath?: string;
-  accountStatus: string | AccountStatus;
+  accountStatus: AccountStatus;
   statusChangeReason?: string;
   statusChangeDate?: Date;
+  // Champs liés à l'authentification
   roles?: string[];
 }
 
@@ -34,6 +36,6 @@ export class ProfessionalUtils {
   }
 
   public static isAccountUsable(professional: Professional): boolean {
-    return professional.accountStatus === AccountStatus.VERIFIED;
+    return professional.accountStatus === AccountStatus.ACTIVE;
   }
 }

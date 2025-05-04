@@ -1,138 +1,381 @@
-<div class="admin-dashboard-container">
-  <div class="dashboard-header">
-    <h1>Tableau de bord administrateur</h1>
-    <div class="user-info">
-      <span>Administrateur ARMA-CARE</span>
-      <button class="btn btn-outline-danger" (click)="logout()">Déconnexion</button>
+<app-professional-details-modal
+  [professional]="currentProfessional"
+  [show]="!!currentProfessional"
+  (close)="currentProfessional = null"
+  (approve)="approveProfessional($event)"
+  (reject)="showRejectDialog($event)"
+  (suspend)="showSuspendDialog($event)"
+  (delete)="archiveProfessional($event)"
+  (reactivate)="approveProfessional($event)"
+  (viewDocument)="viewDocument($event)">
+</app-professional-details-modal>
+
+<div class="dashboard-layout">
+  <!-- Message de bienvenue temporaire avec animation -->
+  <div class="welcome-message" *ngIf="successMessage">
+    <div class="welcome-content">
+      <i class="bi bi-check-circle-fill"></i>
+      <span>{{ successMessage }}</span>
     </div>
   </div>
 
-  <div class="loading-spinner" *ngIf="loading">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Chargement...</span>
+  <!-- Sidebar moderne avec design épuré -->
+  <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
+    <!-- Header avec logo et badge -->
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <h1 class="app-logo">ARMA-CARE</h1>
+        <span class="admin-badge">Admin</span>
+      </div>
+      <button class="toggle-btn" (click)="toggleSidebar()" title="{{ sidebarCollapsed ? 'Développer' : 'Réduire' }} le menu">
+        <i class="bi" [ngClass]="sidebarCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
+      </button>
     </div>
-  </div>
+    
+    <!-- Profil utilisateur -->
+    <div class="sidebar-user" *ngIf="!sidebarCollapsed">
+      <div class="user-avatar">
+        <i class="bi bi-person-circle"></i>
+      </div>
+      <div class="user-info">
+        <h3>{{ authService.getCurrentUser()?.firstName || 'Admin' }}</h3>
+        <span>Administrateur</span>
+      </div>
+    </div>
 
-  <div class="error-message" *ngIf="error">
-    {{ error }}
-  </div>
 
-  <div class="dashboard-content" *ngIf="!loading && !error">
-    <div class="card professionals-card">
-      <div class="card-header">
-        <h3>Gestion des professionnels</h3>
-        <div class="tabs">
-          <button 
-            class="tab-btn" 
-            [class.active]="selectedTab === 'pending'"
-            (click)="changeTab('pending')">
-            En attente
-            <span class="badge" *ngIf="getPendingCount() > 0">
-              {{ getPendingCount() }}
-            </span>
-          </button>
-          <button 
-            class="tab-btn" 
-            [class.active]="selectedTab === 'verified'"
-            (click)="changeTab('verified')">
-            Vérifiés
-          </button>
-          <button 
-            class="tab-btn" 
-            [class.active]="selectedTab === 'rejected'"
-            (click)="changeTab('rejected')">
-            Rejetés
-          </button>
-          <button 
-            class="tab-btn" 
-            [class.active]="selectedTab === 'all'"
-            (click)="changeTab('all')">
-            Tous
-          </button>
+
+    <!-- Menu principal avec icônes et indicateurs -->
+    <nav class="sidebar-menu">
+      <div class="menu-section" *ngIf="!sidebarCollapsed">
+        <span class="section-title">Principal</span>
+      </div>
+      
+      <a class="menu-item" [class.active]="activeSection === 'dashboard'" (click)="setActiveSection('dashboard')" title="Tableau de bord">
+        <i class="bi bi-speedometer2"></i>
+        <span *ngIf="!sidebarCollapsed">Tableau de bord</span>
+      </a>
+      
+      <!-- Menu Professionnels avec sous-menu -->
+      <div class="menu-group" [class.active]="activeSection.startsWith('professional')">
+        <div class="menu-item menu-parent" (click)="toggleSubmenu('professionals')" [class.open]="submenuOpen['professionals']">
+          <i class="bi bi-people"></i>
+          <span *ngIf="!sidebarCollapsed">Professionnels</span>
+          <span class="notification-badge" *ngIf="!sidebarCollapsed && getPendingCount() > 0">{{ getPendingCount() }}</span>
+          <i *ngIf="!sidebarCollapsed" class="bi submenu-icon" [ngClass]="submenuOpen['professionals'] ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
+        </div>
+        
+        <div class="submenu" [ngClass]="{'open': submenuOpen['professionals'], 'collapsed': sidebarCollapsed}">
+          <a class="submenu-item" [class.active]="activeSection === 'professionals'" (click)="setActiveSection('professionals')" title="Gestion des professionnels">
+            <i class="bi bi-list-check"></i>
+            <span *ngIf="!sidebarCollapsed">Gestion</span>
+          </a>
+          <a class="submenu-item" [class.active]="activeSection === 'professionals-stats'" (click)="setActiveSection('professionals-stats')" title="Statistiques des professionnels">
+            <i class="bi bi-bar-chart"></i>
+            <span *ngIf="!sidebarCollapsed">Statistiques</span>
+          </a>
         </div>
       </div>
-      <div class="card-body">
-        <div class="empty-state" *ngIf="filteredProfessionals.length === 0">
-          <p>Aucun professionnel trouvé dans cette catégorie.</p>
-        </div>
+      
+      <a class="menu-item" title="Patients">
+        <i class="bi bi-file-earmark-medical"></i>
+        <span *ngIf="!sidebarCollapsed">Patients</span>
+      </a>
+      
+      <div class="menu-section" *ngIf="!sidebarCollapsed">
+        <span class="section-title">Gestion</span>
+      </div>
+      
+      <a class="menu-item" title="Assurances">
+        <i class="bi bi-shield-check"></i>
+        <span *ngIf="!sidebarCollapsed">Assurances</span>
+      </a>
+      
+      <a class="menu-item" [class.active]="activeSection === 'rapports'" title="Rapports" (click)="setActiveSection('rapports')">
+        <i class="bi bi-graph-up"></i>
+        <span *ngIf="!sidebarCollapsed">Rapports</span>
+      </a>
+      
+      <div class="menu-section" *ngIf="!sidebarCollapsed">
+        <span class="section-title">Système</span>
+      </div>
+      
+      <a class="menu-item" title="Paramètres">
+        <i class="bi bi-gear"></i>
+        <span *ngIf="!sidebarCollapsed">Paramètres</span>
+      </a>
+      
+      <a class="menu-item" title="Audit">
+        <i class="bi bi-shield-lock"></i>
+        <span *ngIf="!sidebarCollapsed">Journal d'audit</span>
+      </a>
+    </nav>
+    
+    <!-- Bouton de déconnexion -->
+    <div class="sidebar-footer">
+      <button class="btn-logout" (click)="logout()" [title]="sidebarCollapsed ? 'Déconnexion' : ''">
+        <i class="bi bi-box-arrow-right"></i>
+        <span *ngIf="!sidebarCollapsed">Déconnexion</span>
+      </button>
+    </div>
+  </aside>
 
-        <div class="professionals-list" *ngIf="filteredProfessionals.length > 0">
-          <div class="professional-item" *ngFor="let professional of filteredProfessionals">
-            <div class="professional-header">
-              <div class="professional-info">
-                <h4>Dr. {{ professional.firstName }} {{ professional.lastName }}</h4>
-                <span class="badge" [ngClass]="{
-                  'badge-pending': professional.accountStatus === AccountStatus.PENDING_VERIFICATION,
-                  'badge-verified': professional.accountStatus === AccountStatus.VERIFIED,
-                  'badge-rejected': professional.accountStatus === AccountStatus.REJECTED,
-                  'badge-suspended': professional.accountStatus === AccountStatus.SUSPENDED
-                }">
-                  {{ professional.accountStatus === AccountStatus.PENDING_VERIFICATION ? 'En attente' :
-                     professional.accountStatus === AccountStatus.VERIFIED ? 'Vérifié' :
-                     professional.accountStatus === AccountStatus.REJECTED ? 'Rejeté' :
-                     professional.accountStatus === AccountStatus.SUSPENDED ? 'Suspendu' : 'Inconnu' }}
-                </span>
-              </div>
-              <div class="professional-actions" *ngIf="professional.accountStatus === AccountStatus.PENDING_VERIFICATION">
-                <button class="btn btn-success btn-sm" (click)="approveProfessional(professional)">Approuver</button>
-                <button class="btn btn-danger btn-sm" (click)="rejectProfessional(professional, 'Documents incomplets ou invalides')">Rejeter</button>
-              </div>
-              <div class="professional-actions" *ngIf="professional.accountStatus === AccountStatus.VERIFIED">
-                <button class="btn btn-warning btn-sm" (click)="suspendProfessional(professional, 'Suspension administrative')">Suspendre</button>
-              </div>
-            </div>
-            
-            <div class="professional-details">
-              <div class="detail-item">
-                <span class="detail-label">Spécialité:</span>
-                <span class="detail-value">{{ professional.speciality }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Email:</span>
-                <span class="detail-value">{{ professional.email }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Téléphone:</span>
-                <span class="detail-value">{{ professional.phone }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Numéro d'enregistrement:</span>
-                <span class="detail-value">{{ professional.registrationNumber }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Date de demande:</span>
-                <span class="detail-value">{{ professional.statusChangeDate | date:'dd/MM/yyyy' }}</span>
-              </div>
-              <div class="detail-item" *ngIf="professional.statusChangeReason">
-                <span class="detail-label">Raison du changement:</span>
-                <span class="detail-value">{{ professional.statusChangeReason }}</span>
-              </div>
-            </div>
-            
-            <div class="professional-documents">
-              <h5>Documents</h5>
-              <div class="documents-list">
-                <div class="document-item" *ngIf="professional.identityDocumentPath">
-                  <span>Pièce d'identité</span>
-                  <button class="btn btn-link" (click)="viewDocument(professional.identityDocumentPath)">Voir</button>
+  <!-- Main Content Area -->
+  <div class="content-wrapper">
+    <!-- En-tête principal -->  
+    <header class="main-header">
+      <div class="header-title">
+        <h2>Tableau de bord administrateur</h2>
+      </div>
+      <div class="header-actions">
+        <div class="search-bar">
+          <i class="bi bi-search"></i>
+          <input type="text" [(ngModel)]="searchQuery" placeholder="Rechercher un professionnel..." (input)="updateFilteredProfessionals()" />
+        </div>
+        <div class="header-user">
+          <span>{{ authService.getCurrentUser()?.firstName || 'Admin' }}</span>
+          <div class="user-avatar">
+            <i class="bi bi-person-circle"></i>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenu principal -->  
+    <main class="admin-main-content">
+   
+
+    <!-- Indicateur de chargement -->  
+    <div class="loading-spinner" *ngIf="loading">
+      <div class="spinner">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+    </div>
+
+    <!-- Messages de notification -->  
+    <div class="notification-area">
+      <!-- Message d'erreur -->  
+      <div class="error-message" *ngIf="error">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span>{{ error }}</span>
+      </div>
+      
+      <!-- Message de succès -->
+      <div class="success-message" *ngIf="successMessage" [@fadeInOut]>
+        <i class="bi bi-check-circle-fill"></i>
+        <span>{{ successMessage }}</span>
+      </div>
+    </div>
+
+    <!-- Section principale -->  
+    <div class="dashboard-content" *ngIf="!loading && !error">
+      <!-- Section Rapports -->
+      <div *ngIf="activeSection === 'rapports'" class="reports-section animated-section">
+        <div class="section-header">
+          <h2 class="section-title"><i class="bi bi-bar-chart me-2"></i>Rapports et graphiques</h2>
+          <div class="section-actions">
+            <button class="btn-export" title="Exporter les données au format CSV">
+              <i class="bi bi-file-earmark-excel"></i> Exporter CSV
+            </button>
+            <button class="btn-refresh" (click)="refreshStats()" title="Rafraîchir les stats">
+              <i class="bi bi-arrow-clockwise"></i> Rafraîchir
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section Gestion des Professionnels -->
+      <div *ngIf="activeSection === 'professionals'" class="professionals-section animated-section">
+        <div class="section-header">
+          <h2 class="section-title"><i class="bi bi-people me-2"></i>Gestion des professionnels</h2>
+          <div class="section-actions">
+            <button class="btn-refresh" (click)="loadProfessionals()" title="Rafraîchir les données">
+              <i class="bi bi-arrow-clockwise"></i> Rafraîchir
+            </button>
+          </div>
+        </div>
+        
+        <!-- Navigation par onglets des professionnels -->
+        <div class="tabs-container">
+          <ul class="tabs-nav">
+            <li class="tab-item" [class.active]="currentTab === 'pending'" (click)="changeTab('pending')">En attente <span class="badge" *ngIf="getPendingCount() > 0">{{ getPendingCount() }}</span></li>
+            <li class="tab-item" [class.active]="currentTab === 'active'" (click)="changeTab('active')">Actifs</li>
+            <li class="tab-item" [class.active]="currentTab === 'rejected'" (click)="changeTab('rejected')">Rejetés</li>
+            <li class="tab-item" [class.active]="currentTab === 'suspended'" (click)="changeTab('suspended')">Suspendus</li>
+            <li class="tab-item" [class.active]="currentTab === 'inactive'" (click)="changeTab('inactive')">Inactifs</li>
+            <li class="tab-item" [class.active]="currentTab === 'all'" (click)="changeTab('all')">Tous</li>
+          </ul>
+        </div>
+        
+        <!-- Liste des professionnels -->  
+        <div class="professionals-container">
+          <!-- Message si aucun résultat -->  
+          <div class="empty-state" *ngIf="filteredProfessionals.length === 0">
+            <div class="empty-icon"><i class="bi bi-search"></i></div>
+            <h3>Aucun résultat</h3>
+            <p>Aucun professionnel trouvé dans cette catégorie.</p>
+          </div>
+
+          <div class="professionals-list" *ngIf="filteredProfessionals.length > 0">
+            <div class="professional-card clickable" *ngFor="let professional of filteredProfessionals" (click)="currentProfessional = professional">
+              <div class="professional-card-header">
+                <div class="professional-info">
+                  <h4>{{ professional.firstName }} {{ professional.lastName }}</h4>
+                  <span class="professional-specialty">{{ professional.speciality }}</span>
                 </div>
-                <div class="document-item" *ngIf="professional.diplomaPath">
-                  <span>Diplôme</span>
-                  <button class="btn btn-link" (click)="viewDocument(professional.diplomaPath)">Voir</button>
+                <div class="status-badge" [ngClass]="getStatusClass(professional.accountStatus)">
+                  <i class="bi" [ngClass]="getStatusIcon(professional.accountStatus)"></i>
+                  {{ getStatusLabel(professional.accountStatus) }}
                 </div>
-                <div class="document-item" *ngIf="professional.licensePath">
-                  <span>Licence professionnelle</span>
-                  <button class="btn btn-link" (click)="viewDocument(professional.licensePath)">Voir</button>
-                </div>
+              </div>
+              
+              <div class="document-section">
                 <div class="document-item" *ngIf="professional.professionalInsurancePath">
-                  <span>Assurance professionnelle</span>
-                  <button class="btn btn-link" (click)="viewDocument(professional.professionalInsurancePath)">Voir</button>
+                  <span>Assurance</span>
+                  <button class="btn-view-document" (click)="$event.stopPropagation(); viewDocument(professional.professionalInsurancePath)" title="Voir le document">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+              </div>
+                
+              <div class="professional-card-footer">
+                <div class="status-info">
+                  <span class="status-date">
+                    <i class="bi bi-calendar-event"></i>
+                    Modifié le: {{ professional.statusChangeDate | date:'dd/MM/yyyy' }}
+                  </span>
+                  <span class="status-reason" *ngIf="professional.statusChangeReason">
+                    <i class="bi bi-info-circle"></i>
+                    Raison: {{ professional.statusChangeReason }}
+                  </span>
+                </div>
+                  
+                <div class="action-buttons">
+                  <ng-container *ngIf="professional.accountStatus === AccountStatus.PENDING_VERIFICATION">
+                    <button class="btn btn-approve" (click)="$event.stopPropagation(); approveProfessional(professional)" title="Valider l'inscription et vérifier les documents">
+                      <i class="bi bi-check-lg"></i> Approuver
+                    </button>
+                    <button class="btn btn-reject" (click)="$event.stopPropagation(); showRejectDialog(professional)" title="Rejeter l'inscription">
+                      <i class="bi bi-x-lg"></i> Rejeter
+                    </button>
+                  </ng-container>
+                  
+                  <ng-container *ngIf="professional.accountStatus === AccountStatus.ACTIVE">
+                    <button class="btn btn-suspend" (click)="$event.stopPropagation(); showSuspendDialog(professional)" title="Suspendre temporairement le compte">
+                      <i class="bi bi-pause-fill"></i> Suspendre
+                    </button>
+                  </ng-container>
+                  
+                  <ng-container *ngIf="professional.accountStatus === AccountStatus.REJECTED">
+                    <button class="btn btn-reconsider" (click)="$event.stopPropagation(); showReconsiderDialog(professional)" title="Reconsidérer l'inscription">
+                      <i class="bi bi-arrow-repeat"></i> Reconsidérer
+                    </button>
+                    <button class="btn btn-view-details" (click)="$event.stopPropagation(); viewProfessionalDetails(professional)" title="Voir les détails complets">
+                      <i class="bi bi-info-circle"></i> Détails
+                    </button>
+                  </ng-container>
+                  
+                  <ng-container *ngIf="professional.accountStatus === AccountStatus.SUSPENDED">
+                    <button class="btn btn-reactivate" (click)="$event.stopPropagation(); approveProfessional(professional)" title="Réactiver le compte">
+                      <i class="bi bi-play-fill"></i> Réactiver
+                    </button>
+                  </ng-container>
+                  
+                  <ng-container *ngIf="professional.accountStatus === AccountStatus.INACTIVE">
+                    <button class="btn btn-view-details" (click)="$event.stopPropagation(); viewProfessionalDetails(professional)" title="Voir les détails complets">
+                      <i class="bi bi-info-circle"></i> Détails
+                    </button>
+                  </ng-container>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      
+      <!-- Section Statistiques des professionnels -->
+      <div *ngIf="activeSection === 'professionals-stats'" class="stats-section animated-section">
+        <div class="section-header">
+          <h2 class="section-title"><i class="bi bi-bar-chart me-2"></i>Statistiques des professionnels</h2>
+          <div class="section-actions">
+            <button class="btn-refresh" (click)="refreshStats()" title="Rafraîchir les stats">
+              <i class="bi bi-arrow-clockwise"></i> Rafraîchir
+            </button>
+          </div>
+        </div>
+        
+        <!-- Cartes statistiques complètes -->
+        <app-stats-cards (tabChange)="handleTabChange($event)"></app-stats-cards>
+        
+        <!-- Graphiques et statistiques avancées -->
+        <div class="stats-charts">
+          <div class="card chart-card">
+            <div class="card-header">
+              <h3>Évolution des inscriptions</h3>
+            </div>
+            <div class="card-body">
+              <div class="chart-placeholder">
+                <i class="bi bi-bar-chart-line"></i>
+                <p>Graphique des inscriptions par mois</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card chart-card">
+            <div class="card-header">
+              <h3>Répartition par statut</h3>
+            </div>
+            <div class="card-body">
+              <div class="chart-placeholder">
+                <i class="bi bi-pie-chart"></i>
+                <p>Répartition des professionnels par statut</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card chart-card">
+            <div class="card-header">
+              <h3>Statistiques par spécialité</h3>
+            </div>
+            <div class="card-body">
+              <div class="chart-placeholder">
+                <i class="bi bi-graph-up"></i>
+                <p>Distribution des professionnels par spécialité médicale</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Exportation des données -->
+        <div class="export-section">
+          <h3>Exportation des données</h3>
+          <div class="export-options">
+            <button class="btn-export">
+              <i class="bi bi-file-earmark-excel"></i> Exporter en CSV
+            </button>
+            <button class="btn-export">
+              <i class="bi bi-file-earmark-pdf"></i> Rapport PDF
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section Tableau de bord (vide ou avec des informations générales) -->
+      <div *ngIf="activeSection === 'dashboard'" class="dashboard-section animated-section">
+        <div class="section-header">
+          <h2 class="section-title"><i class="bi bi-speedometer2 me-2"></i>Tableau de bord ARMA-CARE</h2>
+        </div>
+        
+        <div class="welcome-dashboard">
+          <div class="welcome-icon">
+            <i class="bi bi-grid-1x2"></i>
+          </div>
+          <h3>Bienvenue dans votre tableau de bord d'administration</h3>
+          <p>Utilisez la barre latérale pour naviguer entre les différentes sections de l'application.</p>
+          <p>Pour gérer les professionnels et voir les statistiques, cliquez sur <strong>"Professionnels"</strong> dans le menu.</p>
+        </div>
+      </div>
   </div>
+</main>
+</div>
 </div>

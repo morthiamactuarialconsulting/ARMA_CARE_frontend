@@ -1,18 +1,12 @@
-
-
 <div class="app-container">
+  <!-- Barre de navigation globale (affichée conditionnellement) -->
+  <app-navbar *ngIf="showNavbarAndFooter"></app-navbar>
 
-  <!-- Main Content -->
-  <main class="main-content">
-    <!-- Barre de navigation globale -->
-<app-navbar></app-navbar>
-
-<!-- Contenu principal de l'application -->
-<div class="main-content">
-  <router-outlet></router-outlet>
-</div>
-
-<!-- Footer global -->
-<app-footer></app-footer>
+  <!-- Contenu principal de l'application -->
+  <main class="main-content" [ngClass]="{'no-navbar-footer': !showNavbarAndFooter}">
+    <router-outlet></router-outlet>
   </main>
+
+  <!-- Footer global (affiché conditionnellement) -->
+  <app-footer *ngIf="showNavbarAndFooter"></app-footer>
 </div>

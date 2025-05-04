@@ -339,6 +339,62 @@ Le système utilise trois gardes pour protéger les routes:
 
 ## Services principaux
 
+### Authentication Service
+
+L'authentification dans ARMA-CARE est gérée par `AuthService` qui implémente un système complet d'authentification JWT.
+
+```typescript
+// Exemple d'utilisation du AuthService
+import { AuthService } from '../shared/services/auth.service';
+
+constructor(private authService: AuthService) { }
+
+// Récupérer le token JWT
+const token = this.authService.getToken();
+
+// Vérifier si l'utilisateur est connecté
+const isLoggedIn = this.authService.isLoggedIn();
+
+// Récupérer les informations de l'utilisateur connecté
+const currentUser = this.authService.getCurrentUser();
+```
+
+### Admin Service
+
+Le service `AdminService` gère toutes les fonctionnalités d'administration, notamment la gestion des professionnels.
+
+**Important** : Toutes les requêtes API nécessitent une authentification JWT. Le service utilise la méthode `getAuthHeaders()` pour ajouter automatiquement le token d'authentification à chaque requête.
+
+```typescript
+// Exemple d'implémentation sécurisée d'une requête API
+private getAuthHeaders(): HttpHeaders {
+  const token = this.authService.getToken();
+  return new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+}
+
+// Exemple d'utilisation dans une méthode de service
+getAllProfessionals(): Observable<Professional[]> {
+  return this.http.get<Professional[]>(`${this.apiUrl}/professionals`, {
+    headers: this.getAuthHeaders()
+  });
+}
+```
+
+#### Gestion du cycle de vie des professionnels
+
+Le service AdminService implémente les méthodes suivantes pour gérer le cycle de vie complet des professionnels :
+
+| Méthode | Description | Statut final |
+|---------|-------------|--------------||
+| `approveProfessional(id)` | Active le compte d'un professionnel | ACTIVE |
+| `rejectProfessional(id, reason)` | Rejette la demande d'inscription | REJECTED |
+| `suspendProfessional(id, reason)` | Suspend temporairement un compte | SUSPENDED |
+| `deactivateProfessional(id, reason)` | Désactive définitivement un compte | INACTIVE |
+| `archiveProfessional(id)` | Suppression logique du professionnel | - |
+
+
 ### AuthService
 
 Service central pour la gestion de l'authentification:
@@ -370,6 +426,41 @@ class FileService {
 ```
 
 ## Connexion avec le backend
+
+### Sécurité et authentification JWT
+
+Toutes les requêtes au backend ARMA-CARE doivent inclure un header d'authentification JWT valide. Le service `AuthService` s'occupe de stocker et récupérer le token depuis le `sessionStorage` du navigateur.
+
+```typescript
+// Récupérer le token JWT pour l'authentification
+const token = this.authService.getToken(); // Renvoie le token depuis sessionStorage
+```
+
+Le service `AdminService` et tous les autres services qui effectuent des appels API vers le backend doivent utiliser ces tokens via la méthode `getAuthHeaders()` :
+
+```typescript
+// Ajout des headers d'authentification pour chaque requête API
+private getAuthHeaders(): HttpHeaders {
+  const token = this.authService.getToken();
+  return new HttpHeaders({
+    'Authorization': `Bearer ${token || ''}` // Éviter d'envoyer 'Bearer null'
+  });
+}
+```
+
+### Gestion des erreurs CORS et d'authentification
+
+La communication entre le frontend Angular (port 4200) et le backend Spring Boot (port 8080) peut être sujette à des erreurs CORS, notamment avec les requêtes OPTIONS préliminaires.
+
+Erreurs courantes et solutions :
+
+| Erreur | Description | Solution |
+|--------|------------|----------|
+| `0 Unknown Error` | Échec des requêtes OPTIONS préliminaires | Vérifier la configuration CORS et l'autorisation des requêtes OPTIONS dans Spring Security |
+| `403 Forbidden` | Token JWT invalide ou absent | Vérifier la présence et validité du token, se reconnecter si nécessaire |
+| `net::ERR_FAILED` | Problème CORS ou de connexion | Vérifier que le backend est en cours d'exécution et que la configuration CORS est correcte |
+
+L'application inclut une gestion d'erreur améliorée qui informe l'utilisateur en cas de problème d'authentification ou de connexion.
 
 La communication avec le backend est configurée via les services Angular et l'intercepteur HTTP.
 

@@ -8,7 +8,8 @@ import {
   LoginRequest, 
   PasswordChangeRequest, 
   PasswordResetConfirmRequest, 
-  PasswordResetRequest 
+  PasswordResetRequest,
+  AdminRegisterRequest
 } from '../models/auth.model';
 
 export interface AuthResponse {
@@ -25,6 +26,11 @@ export interface AuthResponse {
   city?: string;
   country?: string;
   accountStatus?: string;
+  message?: string;
+}
+
+export interface AdminExistsResponse {
+  adminExists: boolean;
 }
 
 @Injectable({
@@ -44,6 +50,64 @@ export class AuthService {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
+  /**
+   * Vérifie si un administrateur existe dans le système
+   */
+  checkAdminExists(): Observable<AdminExistsResponse> {
+    return this.http.get<AdminExistsResponse>(`${this.AUTH_API}/admin-exists`)
+      .pipe(
+        tap(response => {
+          console.log('[AUTH-SERVICE] Vérification admin existant:', response.adminExists);
+        })
+      );
+  }
+
+  /**
+   * Enregistrement du premier administrateur (uniquement si aucun n'existe)
+   */
+  registerFirstAdmin(adminData: AdminRegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.AUTH_API}/register-first-admin`, adminData)
+      .pipe(
+        tap(response => {
+          console.log('[AUTH-SERVICE] Enregistrement premier admin réussi');
+          if (response.accessToken) {
+            this.saveTokens(response);
+          }
+        })
+      );
+  }
+
+  /**
+   * Enregistrement d'un nouvel administrateur par un admin existant
+   */
+  registerAdmin(adminData: AdminRegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.AUTH_API}/register-admin`, adminData, {
+      headers: this.getAuthHeader()
+    }).pipe(
+      tap(response => {
+        console.log('[AUTH-SERVICE] Enregistrement nouvel admin réussi');
+      })
+    );
+  }
+
+  /**
+   * Récupère les headers d'authentification
+   */
+  private getAuthHeader(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
+  
+  /**
+   * Récupère les informations de l'utilisateur connecté
+   * @deprecated Utilisez getCurrentUser() à la place pour plus de cohérence
+   */
+  getUser(): any {
+    return this.getCurrentUser();
+  }
+  
   /**
    * Connexion utilisateur
    */

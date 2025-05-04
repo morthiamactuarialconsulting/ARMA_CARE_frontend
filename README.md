@@ -57,3 +57,33 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Application Features
+
+### Authentication and Security
+
+- JWT-based authentication with automatic token refresh
+- Role-based access control (ROLE_ADMIN, ROLE_PROFESSIONAL)
+- Secure password handling with appropriate hashing
+- Form validation on both client and server sides
+
+### Professional Management
+
+- Registration with document upload (identity, diplomas, licenses)
+- Profile management for professionals
+- Dashboard with personal information and status
+
+### Admin Features
+
+- First administrator creation process
+- Admin management interface for creating additional administrators
+- Professional validation workflow
+- Secure admin dashboard with navigation between sections
+
+For more detailed information on administrator features, please refer to the [Administrator Guide](./GUIDE_ADMIN.md).
+
+## Documentation
+
+- [User Manual](./USER_MANUAL.md): Comprehensive guide for all users
+- [Administrator Guide](./GUIDE_ADMIN.md): Specific guide for system administrators
+- [Developer Documentation](./DEVBOOK.md): Technical documentation for developers
