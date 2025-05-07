@@ -40,3 +40,10 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+### docs ###
+
+DATA_MODEL_REFERENCE.md
+DEVBOOK.md
+ARCHITECTURE_STANDALONE.md
+GUIDE_ADMIN.md
